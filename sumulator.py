@@ -10,9 +10,11 @@ class Exchange:
             
         self.k2  = k2 # обобщенный коеффициент инертности
         
-    def calculate(self, time):
+    def calculate(self, time, curTargetTemp = None):
+        if curTargetTemp:
+            self.k1 = curTargetTemp
         diff = self.k1 - self.curT
-        delta = (self.k1 - self.curT)/(self.k2 * time)
+        delta = diff/(self.k2 * time)
         if abs(diff) > abs(delta):
             self.curT = self.curT + delta
         else:
@@ -30,7 +32,9 @@ class Linear:
             self.curT = self.curT
         self.k2  = k2 # скорости нагрева
         
-    def calculate(self, time):
+    def calculate(self, time, power = None):
+        if power:
+            self.k2 = power
     
         delta = self.k2 * time
         self.curT = self.curT + delta
@@ -54,17 +58,23 @@ class Heater():
         self.targetTrack = [self.target.curT]
         
         
-    def heat(self, time, swithcOn = True):
+    def heat(self, time, swithcOn = True, curTargetTemp = None):
+        
+        
         
         if swithcOn:
             self.heatFoo.curT = self.curT
             self.curT = self.heatFoo.calculate(time)
         else:
             self.freazeFoo.curT = self.curT
-            self.curT = self.freazeFoo.calculate(time)
+            self.curT = self.freazeFoo.calculate(time, max(self.outerT, self.target.curT))
         
         self.target.k1 = self.curT
-        temp = self.target.calculate(time)
+        if self.curT > self.target.curT:
+            t = self.curT
+        else:
+            t = self.outerT
+        temp = self.target.calculate(time, t)
         
         self.heaterTrack.append(self.curT)
         self.targetTrack.append(temp)
@@ -167,7 +177,8 @@ if __name__ == '__main__':
     
     for val in target:
         heater.heat(1, True if heater.curT < val else False )
-        
+
+
     heater.plot(target)
     
           

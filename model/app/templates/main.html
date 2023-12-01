@@ -1,0 +1,324 @@
+<html>
+<head>  
+    <link href="bootstrap.min.css"  rel="stylesheet" />
+    <script src="bootstrap.bundle.min.js"></script>
+    <script src="canvasjs.min.js"></script>
+</head>
+<style>
+    input, button{
+        height:30px;
+    }
+    input[type='checkbox']{
+        height:15px;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="row mb-3">
+            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+        </div>
+        <div class="row" style="height:400px">
+            <div class="col-6 h-100 border border-dark p-3">
+                <h4>Программа испытания</h4>
+                <div class="container h-75 border overflow-auto">
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1 bg-success">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    <div class="row border m-1 p-1">
+                        <div class="col-1 border-right">id</div>
+                        <div class="col-4">С 30.11.2023 16:00</div>
+                        <div class="col-4 border-right">По 30.11.2023 19:00</div>
+                        <div class="col"><b>t: 100*C</b></div>
+                        <button class="col-1 btn btn-danger p-0" >X</button>
+                    </div>
+                    
+                </div>
+                <button class="btn-secondary w-100 p-0 mt-3">Новая цель</button>
+            </div>
+            <div class="col-6 h-100 border border-dark p-3">
+                <div class="container  border border-dark">
+                    <div class="col">
+                        <h4>Настройка графика</h4>
+                        <h6>График</h6>
+                        <div class="row mb-1">
+                            <div class="w-50">Количество измерений</div> <input class="w-25" type="number" id="chartPointNumber">
+                        </div>
+                        <div class="row d-flex align-items-center mb-1">
+                            <div style="width: 40%;">Отображать цель</div> <input class="mt-2" style="width: fit-content;" type="checkbox" id="chartShowTarget">
+                            <div style="width: 40%;">Подкрасить отклонения</div> <input class="mt-2" style="width: fit-content;" type="checkbox" id="chartSelectMistakes">
+                        </div>
+                        <h6>Время</h6>
+                        <div class="row d-flex align-items-center mb-1">
+                            <div class="w-25">Real-time</div> <input class="w-25 mt-2" type="checkbox" id="chartRealTime">
+                        </div>
+                        <div class="row" id="chartTimeSelect">
+                            <div class="w-25">Начало</div> <input class="w-25" type="date" id="chartDateFrom"> <input class="w-25 ml-1" type="time" id="chartTimeFrom">
+                        </div>
+                        <div class="row  mb-2" id="chartTimeSelect">
+                            <div class="w-25">Окончание</div> <input class="w-25 " type="date" id="chartDateFrom"> <input class="w-25 ml-1" type="time" id="chartTimeFrom">
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="container  border border-dark">
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>
+                                PID настройки
+                            </h4>
+                            <div class="row">
+                                <div class="w-75">P-значение</div> <input onchange='setPIDParams()' value="{{PValue}}" class="w-25" type="number" id="PValue">
+                            </div>
+                            <div class="row">
+                                <div class="w-75">I-значение</div> <input onchange='setPIDParams()' value="{{IValue}}" class="w-25" type="" id="IValue">
+                            </div>
+                            <div class="row">
+                                <div class="w-75">D-значение</div> <input onchange='setPIDParams()' value="{{DValue}}" class="w-25" type="number" id="DValue">
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <h4>
+                                __
+                            </h4>
+                            <div class="row">
+                                <div class="w-50">Температура</div> <input onchange="changeTargetTemperature()" class="w-50" type="number" id="targetTemperature" value="{{targetTemperature}}">
+                            </div>
+                            <div class="row d-flex align-items-center">
+                                <div class="w-50">Включить</div> <input onchange="setNeedPidding()" class="w-25 mt-2" type="checkbox" checked="{{pidding}}" id="PIDswitchOn" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  </div>
+</body>
+<script type="text/javascript">
+    setInterval(updateValues, 500)
+    async function updateValues(){
+        values = await getChartData()
+        setChartData(values['data'])
+    }
+
+    async function getChartData(dataSize=500){
+        let resData;
+        let test = await fetch(`/getData?count=${dataSize}`,{
+            method: 'POST',
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.text()
+        })
+        .then(data => {
+            resData = JSON.parse(data);
+            return JSON.parse(data);
+        })
+        return test
+    }
+
+    function setChartData(values) {
+        var chart = new CanvasJS.Chart("chartContainer",
+        {
+            title:{
+            text: "Multi-Series Line Chart"  
+            },
+            data: [
+                {        
+                    type: "line",
+                    dataPoints: values[0]
+                },
+                {        
+                    type: "line",
+                    dataPoints: values[1]
+                }
+            ]
+        });
+        chart.render();
+    }
+</script>
+<script>
+    let prevValue='{{targetTemperature}}'
+    let prevPValue='{{targetTemperature}}'
+    let prevIValue='{{targetTemperature}}'
+    let prevDValue='{{targetTemperature}}'
+
+    async function changeTargetTemperature(){
+        
+        t = document.getElementById('targetTemperature').value
+        if (t == null){
+            document.getElementById('targetTemperature').value = prevValue
+            alert('Недопустимое значение температуры')
+        }
+        else{
+            res = await fetch(`/setTargetTemperature?temperature=${t}`,{
+                method: 'GET',
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                return response.text()
+            })
+            .then(data => {
+                resData = JSON.parse(data);
+                return JSON.parse(data);
+            })
+            if (res){
+                if (res['setTargetTemperature']){
+                    document.getElementById('targetTemperature').value = `${res['temperature']}`
+                    prevValue = `${res['temperature']}`
+                    console.log(res['temperature'])
+                    return
+                }
+            }
+            alert('Возникла ошибка, температура не изменена')
+            document.getElementById('targetTemperature').value = prevValue
+            
+        }
+        
+    }
+
+    async function setNeedPidding(){
+        prevStatus = document.getElementById('targetTemperature').checked
+        
+        res = await fetch(`/changePidStatus?status=${document.getElementById('PIDswitchOn').checked}`,{
+            method: 'GET',
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.text()
+        })
+        .then(data => {
+            resData = JSON.parse(data);
+            return JSON.parse(data);
+        })
+        if (res){
+            if (res['changePidStatus']){
+                document.getElementById('PIDswitchOn').value = `${res['needPid']}`
+                return
+            }
+        }
+        alert('Возникла ошибка, статус PID не изменен')
+        document.getElementById('targetTemperature').checked = prevStatus
+    }
+
+
+    async function setPIDParams(){
+        PValue = document.getElementById('PValue').value
+        IValue = document.getElementById('IValue').value
+        DValue = document.getElementById('DValue').value
+        
+        res = await fetch(`/setPIDParams?P=${PValue}&I=${IValue}&D=${DValue}`,{
+            method: 'GET',
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.text()
+        })
+        .then(data => {
+            resData = JSON.parse(data);
+            return JSON.parse(data);
+        })
+        if (res){
+            if (res['setPIDParams']){
+                document.getElementById('PValue').value = res['PID']['P']
+                prevPValue = res['PID']['P']
+                document.getElementById('IValue').value = res['PID']['I']
+                prevIValue = res['PID']['I']
+                document.getElementById('DValue').value = res['PID']['D']
+                prevDValue = res['PID']['D']
+                return
+            }
+        }
+        document.getElementById('PValue').value = prevPValue 
+        document.getElementById('IValue').value = prevIValue
+        document.getElementById('DValue').value = prevDValue
+
+        alert('Возникла ошибка, параметры PID не изменены')
+        document.getElementById('targetTemperature').checked = prevStatus
+    }
+</script>
+</html>
