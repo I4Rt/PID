@@ -7,6 +7,7 @@ import numpy as np
 from threading import Thread
 
 import modules.PID as PID
+from modules.PIDModels import *
 from modules.sender import *
 from modules.reciever import *
 
@@ -26,9 +27,9 @@ class Heater:
         self.I = i
         self.D = d
         
-        self.pid = PID.PID(self.P, self.I, self.D)
-        self.pid.SetPoint = self.targetTemperature
-        self.pid.setSampleTime(1)
+        self.pid = MyPID(self.P, self.I, self.D)
+        self.pid.setTarget(self.targetTemperature)
+        
         
         try:
             self.ser = serial.Serial(serialName, baudrate=38400, timeout=0.1)
@@ -47,10 +48,10 @@ class Heater:
         
     def controlFunc(self):
         
-        self.pid.setKp(self.P)
-        self.pid.setKi(self.I)
-        self.pid.setKd(self.D)
-        self.pid.SetPoint = self.targetTemperature
+        self.pid.k1 = self.P
+        self.pid.k3 = self.I
+        self.pid.k2 = self.D
+        self.pid.setTarget(self.targetTemperature)
         
         
         #read temperature data
@@ -66,10 +67,15 @@ class Heater:
         
         if self.needPID:
             swith_on(self.ser)
-            self.pid.update(t)
-            targetPwm = self.pid.output
+            
+            targetPwm = self.pid.update(t)
+            print(targetPwm)
+            if targetPwm > 300: 
+                targetPwm = 0
+            print(targetPwm)
             targetPwm = max(min( int(targetPwm), 100 ),0)
-            print ("Target: %.1f C | Current: %.1f C | PWM: %s %%"%(self.targetTemperature, self.currentTemperature, targetPwm))
+            
+            # print ("Target: %.1f C | Current: %.1f C | PWM: %s %%"%(self.targetTemperature, self.currentTemperature, targetPwm))
             set_power(self.ser, int(10000 * targetPwm / 100))
         
             sleep(0.05)

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <title>Document</title>
+    <link href="static/bootstrap.min.css"  rel="stylesheet" />
+    <script src="static/jquery-3.7.1.min.js"></script>
+    <script src="static/canvasjs.min.js"></script>
+</head>
+<style>
+    html {
+        height: 100%;
+    }
+    img{
+        user-select: none;
+
+    }
+</style>
+<body  style="height:100%">
+    <div class=" h-100 d-flex flex-column justify-content-center align-items-center" style="height:100%">
+        <div  id="movement_holder" class="m-0 p-0" style="object-fit:content-box; width: 800px; height:400px; background-color: gray;overflow: hidden;">
+            <div draggable="false" style="position: relative; height:100%" id='movement_target' >
+            </div>
+        </div>
+        <div class="row " style="width: 800px;">
+            <button class="col-2" onclick="reset_movement_target()">reset</button>
+            <div class="col"></div>
+            <div class="col-2 d-flex justify-content-end" id="zoom_value_field">
+                100%
+            </div>
+        </div>
+        
+
+    </div>
+    
+    
+
+    <script>
+        // canvas data set
+        function setChartData(values) {
+            var chart = new CanvasJS.Chart("movement_target",
+            {
+                title:{
+                text: "Multi-Series Line Chart"  
+                },
+                data: [
+                    {        
+                        type: "line",
+                        dataPoints: [
+                            {x: 0,   y:20},
+                            {x: 20,  y:80},
+                            {x: 40,  y:80},
+                            {x: 60,  y:120},
+                            {x: 120, y:120}
+                        ]
+                    },
+                    {        
+                        type: "line",
+                        dataPoints: [
+                            {x: 0,   y:20},
+                            {x: 5,  y:28},
+                            {x: 10,  y:40},
+                            {x: 15,  y:60},
+                            {x: 20, y:82}
+                        ]
+                    }
+                ]
+            });
+            chart.render();
+        }
+        setChartData()
+    </script>
+
+
+    <script>
+
+        // canvas movement
+
+        function reset_movement_target(){
+            $('#movement_target').css("top", 0 + "px");
+            $('#movement_target').css("left", 0 + "px");
+        }
+
+        console.log(typeof($('#movement_target').position().top))
+
+        let mb_down = false
+        let x = null
+        let y = null
+
+        let cur_x = null
+        let cur_y = null
+
+        let base_width = Number($('#movement_target').css('width').replace('px', ''))
+        let base_height = Number($('#movement_target').css('height').replace('px', ''))
+
+        mh_width = Number($('#movement_holder').css('width').replace('px', ''))
+        mh_height = Number($('#movement_holder').css('height').replace('px', ''))
+        
+        let cur_scale = 100
+        let base_not_scaled_left = 0
+        let base_not_scaled_top = 0
+        $(document).ready((event) =>{
+            cur_x = event.clientX
+            cur_y = event.clientY
+        })
+
+        $(document).on("mousemove", (event) => {
+            cur_x = event.clientX
+            cur_y = event.clientY
+        
+        })
+
+        $('html').mouseup(() => {
+            mb_down = false
+        })
+        
+        $('#movement_holder').mousedown((event) => {
+            x = event.clientX
+            y = event.clientY
+
+            last_y = $('#movement_target').position().top - $('#movement_holder').position().top
+            last_x = $('#movement_target').position().left - $('#movement_holder').position().left
+            console.log(last_x + ' ' + last_y)
+            mb_down = true
+        })
+
+        $('#movement_holder').on('mousewheel', (event) => {
+            delta = event.originalEvent.wheelDelta / 150
+            cur_scale = cur_scale + 10 * delta
+
+            if (cur_scale > 300){
+                cur_scale = 300
+            }
+            if (cur_scale < 100){
+                cur_scale = 100
+            }
+            console.log(base_width )
+            console.log(base_width * (cur_scale/10000))
+            console.log(base_height * (cur_scale/10000))
+
+            $('#movement_target').css("width", base_width * (cur_scale/100) + "px");
+            $('#movement_target').css("height", base_height * (cur_scale/100) + "px");
+            $('#zoom_value_field').html(cur_scale + '%')
+
+            cur_h_top = $('#movement_holder').position().top
+            cur_h_left = $('#movement_holder').position().left
+            
+
+            cur_top = $('#movement_target').position().top
+            cur_left = $('#movement_target').position().left
+
+            local_x = cur_x - cur_h_left
+            local_y = cur_y - cur_h_top
+
+            new_top = Math.abs(local_y - base_not_scaled_top) * (cur_scale/100) - local_y
+            new_left = Math.abs(local_x - base_not_scaled_left) * (cur_scale/100) - local_x
+
+
+            
+            
+
+            new_x = - new_left
+            new_y = - new_top
+            
+            if (new_y > 0){
+                new_y = 0
+            }
+            if (new_y < mh_height - base_height * (cur_scale/100)){
+                new_y = mh_height - base_height * (cur_scale/100)
+            }
+
+            if (new_x > 0){
+                new_x = 0
+            }
+            if (new_x < mh_width - base_width * (cur_scale/100)){
+                new_x = mh_width - base_width * (cur_scale/100)
+            }
+            
+            
+            $('#movement_target').css("top", new_y + "px");
+            $('#movement_target').css("left", new_x + "px");
+
+            setChartData()
+
+        })
+        function changePosition(){
+            if (mb_down){
+                dx = cur_x - x
+                dy = cur_y - y
+                new_y = last_y + dy
+                new_x = last_x + dx
+
+                
+                if (new_y > 0){
+                    new_y = 0
+                }
+                if (new_y < mh_height - base_height * (cur_scale/100)){
+                    new_y = mh_height - base_height * (cur_scale/100)
+                }
+    
+                if (new_x > 0){
+                    new_x = 0
+                }
+                if (new_x < mh_width - base_width * (cur_scale/100)){
+                    new_x = mh_width - base_width * (cur_scale/100)
+                }
+                
+                base_not_scaled_left = new_x * 100 / cur_scale
+                base_not_scaled_top = new_y *  100 / cur_scale 
+                
+
+                
+                $('#movement_target').css("top", new_y + "px");
+                $('#movement_target').css("left", new_x + "px");
+                console.log(x + ' ' + y)
+                setChartData()
+            }
+            
+        }
+        setInterval(changePosition, 30)
+    </script>
+    <script src="static/bootstrap.bundle.min.js"></script>
+</body>
+</html>
