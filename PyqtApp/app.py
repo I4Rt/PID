@@ -1,6 +1,7 @@
 from config import *
 
 from view.TabsView import *
+from view.QTDBSelector import *
 from time import time
 import sys
 
@@ -24,30 +25,37 @@ app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
 ui = Ui_MainWindow(ser)
 ui.setupUi(MainWindow)
-# ui.startUpdate()
-# ui.controlThread.start()
+ui.startUpdate()
+# ui.startAutoSave()
+ui.controlThread.start()
 
 def finish():
-    # with flask_app.app_context():
-    Experiment.deleteAll()
-    print('\n\n\nhere\n\n\n')
-    exp = Experiment('ptf', 'kjffffkldfk')
-    exp.setSSTarget(30)
-    exp.addFSRealData(30, 0)
-    exp.addFSRealData(31, 15)
     
-    exp.updateFSTargetProfile([[30, 0], [100, 50], [100, 100]])
-    exp.save()
+    # Experiment.deleteAll()
+    # print('\n\n\nhere\n\n\n')
+    # exp = Experiment(f'Эксперимент {int(time())%10000}', 'kjffffkldfk')
+    # exp.setSSTarget(30)
+    # exp.addFSRealData(30, 0)
+    # exp.addFSRealData(31, 15)
     
-    print(exp.getData(SSRealDataMeasurement))
+    # exp.updateFSTargetProfile([[30, 0], [100, 50], [100, 100]])
+    # exp.save()
     
-    # app.exec_()
+    # print(exp.getData(SSRealDataMeasurement))
     
-    # ui.controlThread.stop()
+    # dialog = QtWidgets.QMainWindow()
+    # QTDBSelector(Experiment.getAll()).setupUi(dialog)
+    
+    # dialog.show()
+    
+    app.exec_()
+    
+    ui.controlThread.stop()
     
     
 if __name__ == "__main__":    
-    # MainWindow.show()
+    MainWindow.show()
+    
     
     sys.exit(finish())
     

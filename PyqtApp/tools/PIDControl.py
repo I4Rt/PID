@@ -20,6 +20,7 @@ def controllTemperature(getCurTempFunc, getRefTempFunc,configurePidFunc, calcula
             
             state.plot1RealData[0].append(x)
             state.plot1RealData[1].append(curT)
+            state.experiment.addFSRealData(curT, x)
             
     except Exception as e:
         raise e

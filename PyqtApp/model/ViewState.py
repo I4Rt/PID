@@ -1,10 +1,13 @@
 from time import time, sleep
 from tools.PIDModels import *
 
+from data.Experiment import *
+
 class ViewState:
     instance = None
     
     def __init__(self):
+        self.experiment:Experiment|None = None
         self.plot1Pause = True
         self.plot2Pause = True
         
@@ -27,7 +30,7 @@ class ViewState:
         self.selectedPID = 'Степенная'
         self.tableData = []
         
-        self.experiment = None
+        
         
         self.K_1 = 0.
         self.K_2 = 0.
@@ -64,6 +67,35 @@ class ViewState:
             cls.instance = ViewState()
         return cls.instance
                    
+    def setExperimentFSTarget(self, targetData:list[list[float]]|None=None):
+        if not targetData:
+            targetData = self.plot1TargetData
+        print('targetData', targetData)
+        expData = []
+        size_ = len(targetData[0])
+        print('size_', size_)
+        for i in range(size_):
+            x,y = targetData[1][i], targetData[0][i] # temperature, time
+            expData.append([x,y])
+        
+            
+        self.experiment.updateFSTargetProfile(expData)
+        # self.experiment.save()
+    
+    # def setExperimentFSTarget(self, realData:list[list[float]]|None=None):
+    #     if not realData:
+    #         realData = self.plot1RealData
+    #     print('realData', realData)
+    #     expData = []
+    #     size_ = len(realData[0])
+    #     print('size_', size_)
+    #     for i in range(size_):
+    #         x,y = realData[1][i], realData[0][i] # temperature, time
+    #         expData.append([x,y])
+        
+            
+    #     self.experiment.updateFSRealProfile(expData)
+    
     #PLOT1
     def pausePlot1(self):
         print('paused')

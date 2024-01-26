@@ -21,17 +21,17 @@ class Experiment(BaseData):
     ssTarget = Column(Double, unique=False)
     ssRealData = relationship('SSRealDataMeasurement', cascade="all,delete", backref='Experiment', lazy='subquery')
 
-    def __init__(self,  name, descriotion='', beginningTime=datetime.now(), fsTargetData=[], fsRealData=[], ssTarget=20, ssRealData=[]):
+    def __init__(self,  name, descriotion='', beginningTime=datetime.now(), fsTargetData:list[FSTargetDataMeasurement]=[], fsRealData:list[FSRealDataMeasurement]=[], ssTarget=20, ssRealData:list[SSRealDataMeasurement]=[]):
         BaseData.__init__(self)
         self.name = name
         self.description = descriotion
         
         self.beginingTime = beginningTime
         
-        self.fsTargetData = fsTargetData
-        self.fsRealData = fsRealData
+        self.fsTargetData:list[FSTargetDataMeasurement] = fsTargetData
+        self.fsRealData:list[FSRealDataMeasurement] = fsRealData
         self.ssTarget = ssTarget
-        self.ssRealData = ssRealData
+        self.ssRealData:list[SSRealDataMeasurement] = ssRealData
             
     def __addLinkedClassData(self, dataclass:type[TemperatureDataBase], temperature:float, time:float, __needSaveSelf:bool=True):
         if __needSaveSelf:
@@ -41,7 +41,11 @@ class Experiment(BaseData):
         
     def __dropLinkedClassData(self, dataclass):
         with DBSessionMaker.getSession() as ses:
-            ses.query(dataclass).filter_by(experimentId = self.id).delete()
+            res = ses.query(dataclass).filter(dataclass.experimentId==self.id).all()
+            
+            for data in res:
+                ses.delete(data)
+                ses.commit()
        
     def getData(self, className:type[TemperatureDataBase]):
         targetId = self.id
@@ -76,11 +80,15 @@ class Experiment(BaseData):
         Params:
          - targetPoints: array of the tuples (or array like sequences) like [temperature:float, time:float] data
         """
-        self.dropFSTargetData()
+        print(self.fsTargetData)
+        print('dropped', self.dropFSTargetData())
         if __needSaveSelf:
             self.save() 
         for point in targetPoints:
-            self.addFSTargetData(point[0], point[1], False)
+            self.addFSTargetData(point[0], point[1], True)
+            
+        print('input', targetPoints, 'newREcords', len(self.fsTargetData))
+        self.save()
             
             
 

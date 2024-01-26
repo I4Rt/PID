@@ -5,9 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 Base = declarative_base()
 
 
-flask_app = Flask(__name__)
-flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:qwerty@localhost:5432/furnace_db'
-flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+# flask_app = Flask(__name__)
+# flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:qwerty@localhost:5432/furnace_db'
+# flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 # app has been set and configured
 
 
