@@ -14,6 +14,9 @@ class ViewState:
         self.plot1Stopped = True
         self.plot2Stopped = True
         
+        self.firstPID1Run = True
+        self.firstPID2Run = True
+        
         self.playTime1 = None
         self.pauseTime1 = None
         self.pauseDuration1 = 0
@@ -45,7 +48,21 @@ class ViewState:
 
         self.pidModule = PID(23)
         self.pidModuleIndustrial = IndustrialPID()
- 
+        
+        self.needAIM = True
+        
+        self.needShuffle = False
+        self.needSearch0 = False
+        self.needGoHome = False
+        self.commandMotorVerticalIsRunning = False
+        self.commandMotorRotateIsRunning = False
+        self.needMoveDistance = False
+        
+        self.currentDeep = None
+        self.targetDeep = 0
+        self.needUpdateDeepth = False
+        self.needStopVertical = False
+        
     def configPidParams(self):
         self.pidModule.k1 = self.K_1
         self.pidModule.k2 = self.K_2
@@ -96,6 +113,9 @@ class ViewState:
             
     #     self.experiment.updateFSRealProfile(expData)
     
+    def getMotorTargetMove(self):
+        return self.targetDeep - self.currentDeep
+           
     #PLOT1
     def pausePlot1(self):
         print('paused')
@@ -105,12 +125,13 @@ class ViewState:
         
     def playPlot1(self):
         print('played')
-        if self.plot1Stopped:
+        if self.firstPID1Run:
             self.playTime1 = time()
             self.pauseTime1 = None
             self.pauseDuration1 = 0
             self.plot1Pause = False
-            self.plot1Stopped = False
+            # self.plot1Stopped = False #commited now
+            self.firstPID1Run = False
         else:
             if self.pauseTime1:
                 self.pauseDuration1 += time() - self.pauseTime1
@@ -134,12 +155,13 @@ class ViewState:
             self.pauseTime2 = time()
         
     def playPlot2(self):
-        if self.plot2Stopped:
+        if self.firstPID2Run:
             self.playTime2 = time()
             self.pauseTime2 = None
             self.pauseDuration2 = 0
             self.plot2Pause = False
-            self.plot2Stopped = False
+            # self.plot2Stopped = False #commited now
+            self.firstPID2Run = False
         else:
             if self.pauseTime2:
                 self.pauseDuration2 += time() - self.pauseTime2
@@ -151,12 +173,31 @@ class ViewState:
         self.plot2Stopped = True 
         
     def getPlot2NowTime(self):
+        # needCheck to continue from the time
         if self.playTime2:
             return time() - self.playTime2 - self.pauseDuration2
         return None
         
+    #setters
+    def togleAIM(self):
+        self.needAIM = not self.needAIM
     
-    
+    def dropPlotTimes(self):
+        self.plot1Pause = True
+        self.plot2Pause = True
+        
+        self.plot1Stopped = False
+        self.plot2Stopped = False
+        
+        self.firstPID1Run = True
+        self.firstPID2Run = True
+        
+        self.playTime1 = None
+        self.pauseTime1 = None
+        self.pauseDuration1 = 0
+        self.playTime2 = None
+        self.pauseTime2 = None
+        self.pauseDuration2 = 0
    
     
         

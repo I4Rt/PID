@@ -20,7 +20,7 @@ class TemperatureDataBase(BaseData):
     @classmethod
     def selectByExperimentId(cls, experimentId):
         with DBSessionMaker.getSession() as ses:
-            return ses.query(cls).filter_by(experimentId=experimentId).all()
+            return ses.query(cls).filter_by(experimentId=experimentId).order_by(cls.time).all()
     
     
     

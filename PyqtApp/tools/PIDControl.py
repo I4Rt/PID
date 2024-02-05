@@ -13,7 +13,7 @@ def controllTemperature(getCurTempFunc, getRefTempFunc,configurePidFunc, calcula
             x = state.getPlot1NowTime()
             refT = getRefTempFunc(x, state.plot1TargetData[0], state.plot1TargetData[1])
             # print('refT', refT)
-            configurePidFunc()
+            state.configPidParams()
             powerLevel = max(0, min(calculateFunc(curT, refT), 80))
             
             setPowerFunc(ser, powerLevel)
