@@ -1,15 +1,15 @@
 from tools.plant.PowerSupply import *
-from tools.SerialConnection import *
 
 from threads.StopableThread import *
 
 
 class PowerSupplyInterface:
     
-    def __init__(self, powerSupply:PowerSupply):
+    def __init__(self, powerSupply:PowerSupply, ser:serial.Serial):
         
         self.readyToWork = False
         self.__powerSupply = powerSupply
+        self.ser = self.ser
         
         
         self.setAmperageValue = 0
@@ -23,13 +23,13 @@ class PowerSupplyInterface:
         
         
     def __powerSupplyControllLoopStrp(self):
-        ser = SerialConnection.getInstance()
-        if ser:
-            self.__powerSupply.setAmpere(ser, self.targetAmperageValue)
+        
+        if self.ser:
+            self.__powerSupply.setAmpere(self.ser, self.targetAmperageValue)
             if self.needSetPower:
-                res = self.__powerSupply.switchON(ser)
+                res = self.__powerSupply.switchON(self.ser)
                 
-            self.setAmperageValue = self.__powerSupply.getAmperage(ser)
+            self.setAmperageValue = self.__powerSupply.getAmperage(self.ser)
             
             
     def startWork(self):

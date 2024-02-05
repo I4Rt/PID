@@ -9,6 +9,6 @@ def hex16_to_float(h:bytes):
 
 
 if __name__ == "__main__":
-    h = float_to_hex16(3023.521)
+    h = float_to_hex16(0.06)
     print(h)
     print(hex16_to_float(h))

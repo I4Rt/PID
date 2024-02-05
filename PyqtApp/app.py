@@ -16,26 +16,63 @@ import data
 
 from tools.plant.PowerSupply import *
 from tools.plant.Motor import *
+from tools.plant.VoltageGetter import *
 
 from model.PowerSupplyInterface import *
+from model.Apparats import *
 
-
-
+from tools.SerialConnector import *
         
 
 Base.metadata.create_all(e)
 
 
 import serial
-try:
-    port = "COM5"  # Replace with the appropriate COM port name
+
+try: 
+    port = 'COM5'  # Replace with the appropriate COM port name
     baudrate = 19200  # Replace with the desired baud rate
     ser = serial.Serial(port, baudrate=baudrate, timeout=0.1, parity='E')
     ser.flush()
-except:
-    print('ser exception')
-    # sys.exit()
+except Exception as e:
+    print('ser exception', e)
+    ser = None    
+        
+#auto com port getter
+'''
+portNameList = getExistPorts()
+found = False
+for portName, comment in portNameList:
+    print('checking', portName, comment)
+    if found:
+        break
     ser = None
+    try:
+        if not comment.startswith('Стандартный последовательный порт по соединению Bluetooth'):
+            port = portName  # Replace with the appropriate COM port name
+            baudrate = 19200  # Replace with the desired baud rate
+            ser = serial.Serial(port, baudrate=baudrate, timeout=0.1, parity='E')
+            ser.flush()
+            if powerSupply.getStatus(ser):
+                found = True
+    except Exception as e:
+        print('ser exception', e)
+        ser = None    
+if not found:
+    print('no com port connecion')
+    sys.exit()
+'''
+
+def testVoltageGetter(ser:serial.Serial, looped = False):
+    vg = VoltageGetter(b'\x01')
+    
+    begin = time()
+    while looped or time() - begin < 100:
+        print('cur voltage', vg.getVoltage(ser))
+        sleep(0.5)
+
+testVoltageGetter(ser, True)
+sys.exit()
 
 
 def testPowerSupply2():
@@ -54,7 +91,6 @@ def testPowerSupply2():
         print('switch off res is', ps.switchOFF(ser))
         print('amperage after swithc off', ps.getAmperage(ser))
         
-
 def testPowerSupply():
     ps = PowerSupply()
     ps.getStatus(ser)
@@ -64,7 +100,7 @@ def testPowerSupply():
     ps.getAmperage(ser)
     ps.switchOFF(ser)
     
-def checkMotors():
+def testMotors():
     # ver-1
     # m1 = Motor(b'\x04')
     # m1.updateStatus(ser)
@@ -150,7 +186,7 @@ def finish():
 # ui.controlThread.start()
 # !old code
 
-if __name__ == "__main__":    
+if __name__ == "__main__":  
     #run app
     window.show()
     sys.exit(finish())

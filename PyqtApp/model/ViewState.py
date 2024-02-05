@@ -8,6 +8,7 @@ class ViewState:
     
     def __init__(self):
         self.experiment:Experiment|None = None
+        # controll assets
         self.plot1Pause = True
         self.plot2Pause = True
         
@@ -24,17 +25,24 @@ class ViewState:
         self.pauseTime2 = None
         self.pauseDuration2 = 0
         
+        # plot_2
+        self.needAIM = True
+        
+        # plot assets
         self.plot1TargetData = [[],[]]
         self.plot1RealData = [[],[]]
         self.plot2TargetData = []
         self.plot2RealData = []
         
         
+        # pid assets
         self.selectedPID = 'Степенная'
         self.tableData = []
         
-        
-        
+        self.targetTemperature = None
+        self.realTemperature = None
+
+        # ! data in the view !
         self.K_1 = 0.
         self.K_2 = 0.
         self.K_3 = 0.
@@ -46,11 +54,13 @@ class ViewState:
 
         self.spaceValue = 10.
 
+        # pid models
         self.pidModule = PID(23)
         self.pidModuleIndustrial = IndustrialPID()
         
-        self.needAIM = True
         
+        
+        # motors
         self.needShuffle = False
         self.needSearch0 = False
         self.needGoHome = False
@@ -62,6 +72,10 @@ class ViewState:
         self.targetDeep = 0
         self.needUpdateDeepth = False
         self.needStopVertical = False
+        
+        # powersupply
+        self.targetAmperage = 0
+        self.realAmperage = None
         
     def configPidParams(self):
         self.pidModule.k1 = self.K_1

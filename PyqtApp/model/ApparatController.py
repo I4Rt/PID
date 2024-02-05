@@ -24,39 +24,50 @@ class ApparatController():
         try:
             sleep(0.05)
             state = ViewState.getState()
-            self.__pidControl(state)
+            x1 = state.getPlot1NowTime()
+            x2 = state.getPlot2NowTime()
+            needSaveData = self.__pidControl(state, x1, x2)
             self.__motorsControl(state)
             # controll other booleans
+            self.__powerSupplyControl(state)
+            # add params
+            if needSaveData: #TODO: add time intervales
+                if not state.plot1Stopped:
+                    state.experiment.addFSRealData(state.realTemperature, x1)
+                else:
+                    state.experiment.addSSRealData(state.realTemperature, x2)
+                    state.experiment.addAmperageData(state.realAmperage, x2)
         except Exception as e:
             # raise e
             # print('apparature error', e)
             pass
-              
-    def __pidControl(self, state:ViewState):
+         
+         
+     
+    def __pidControl(self, state:ViewState, x1:float, x2:float):
         needPID = False
         if not state.plot1Stopped:
             if not state.plot1Pause:
-                x = state.getPlot1NowTime()
+                x = x1
                 print('time from the beginning:', x)
-                refT = getYinX(x, state.experiment.getData(FSTargetDataMeasurement)) # need always save experiment model
+                state.targetTemperature = refT = getYinX(x, state.experiment.getData(FSTargetDataMeasurement)) # need always save experiment model
                 needPID = True
         elif not state.plot2Stopped:
             if not state.plot2Pause:
-                x = state.getPlot2NowTime()
-                refT = state.experiment.ssTarget # need always save experiment model
+                x = x2
+                state.targetTemperature = refT = state.experiment.ssTarget # need always save experiment model
                 needPID = True
         if needPID:
             # print('refT', refT)
-            curT = getTemperature(self.ser, b'\x02\x04\x00\x00\x00\x02')
+            state.realTemperature = curT = getTemperature(self.ser, b'\x02\x04\x00\x00\x00\x02')
             state.configPidParams()
             powerLevel = max(0, min(state.getPower(curT, refT), 80))
             powerLevel = int(10000 * powerLevel / 100)
             swith_on(self.ser)
             set_power(self.ser, powerLevel)
-            if not state.plot1Stopped:
-                state.experiment.addFSRealData(curT, x)
-            else:
-                state.experiment.addSSRealData(curT, x)
+        
+        return needPID
+            
                 
     def __motorsControl(self, state:ViewState):
         #vartical
@@ -175,4 +186,39 @@ class ApparatController():
                             # error counter !
                         else:
                             state.commandMotorRotateIsRunning = True
+
                 
+    def __powerSupplyControl(self, state:ViewState):
+        needSetAmperage = False
+        if not state.plot2Stopped:
+            if not state.plot2Pause:
+                needSetAmperage = True
+        if needSetAmperage:
+            res = powerSupply.getStatus(self.ser)
+            if res:
+                if powerSupply.status == 0:
+                    res = powerSupply.setAmpere(self.ser, max(0, min(state.targetAmperage, 10))) # TODO: maximum set 10 for now
+                    if res:
+                        res = powerSupply.switchON(self.ser)
+                        if not res:
+                            print('error switch on power supply')
+                    else:
+                        print('error set amperage power supply')
+                else:
+                    powerSupply.switchOFF(self.ser)
+                    print('error status power supply', powerSupply.status)
+            else:
+                powerSupply.switchOFF(self.ser)
+                print('error status power supply', 'command did not proceed')
+        else:
+            res = powerSupply.switchOFF(self.ser)
+            if not res:
+                print('power supply switch off error')
+                
+        amperageRes = powerSupply.getAmperage(self.ser)
+        if amperageRes >= 0:
+            state.realAmperage = amperageRes
+        else:
+            print('power supply switch off error')
+        
+        
