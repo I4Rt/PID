@@ -33,6 +33,8 @@ class ViewState:
         self.plot1RealData = [[],[]]
         self.plot2TargetData = []
         self.plot2RealData = []
+        self.plot2AmperageData = []
+        self.plot2VoltageData = []
         
         
         # pid assets

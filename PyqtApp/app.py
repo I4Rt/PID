@@ -17,6 +17,7 @@ import data
 from tools.plant.PowerSupply import *
 from tools.plant.Motor import *
 from tools.plant.VoltageGetter import *
+from tools.plant.Heater import *
 
 from model.PowerSupplyInterface import *
 from model.Apparats import *
@@ -63,6 +64,25 @@ if not found:
     sys.exit()
 '''
 
+
+def testVoltageSetter(ser:serial.Serial, looped = False):
+    h = Heater(b'\x01')
+    
+    begin = time()
+    i = 20
+    while looped or time() - begin < 10:
+        i += 20
+        print('set voltage', h.setVoltage(ser, min(i / 100, 10)), min(i / 100, 10))
+        print('switch on', h.swithON(ser))
+        sleep(0.05)
+        if min(i / 100, 10) == 10:
+            break
+    print('set voltage', h.setVoltage(ser, 0))
+    h.swithOFF(ser)
+    
+    
+
+
 def testVoltageGetter(ser:serial.Serial, looped = False):
     vg = VoltageGetter(b'\x01')
     
@@ -70,9 +90,6 @@ def testVoltageGetter(ser:serial.Serial, looped = False):
     while looped or time() - begin < 100:
         print('cur voltage', vg.getVoltage(ser))
         sleep(0.5)
-
-testVoltageGetter(ser, True)
-sys.exit()
 
 
 def testPowerSupply2():
@@ -168,6 +185,8 @@ def testMotors():
         sleep(0.1)
     print('finished')
 
+# testVoltageSetter(ser, True)
+# sys.exit()
 
 apparatController = ApparatController(ser)
 apparatThread = StopableThread(True, target=apparatController.controllApparature, args=())

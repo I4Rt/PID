@@ -19,7 +19,7 @@ class VoltageGetter:
                 data = dataPice2 + dataPice1
                 print(data)
                 flaotData = hex16_to_float(data)
-                return flaotData * 20
+                return flaotData # * 2
         else:
             print('modbus error', code, msg)
         return -1
