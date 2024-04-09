@@ -36,6 +36,8 @@ class ViewState:
         self.plot2AmperageData = []
         self.plot2VoltageData = []
         
+        self.currentTime = None
+        
         
         # pid assets
         self.selectedPID = 'Степенная'
@@ -43,6 +45,14 @@ class ViewState:
         
         self.targetTemperature = None
         self.realTemperature = None
+        
+        self.realTemperature_1 = None
+        self.realTemperature_2 = None
+        
+        self.indipendTemperature = None
+        
+        self.realThermocouple = None
+        self.curPower = 0
 
         # ! data in the view !
         self.K_1 = 0.
@@ -53,17 +63,46 @@ class ViewState:
         
         self.K_1_industrial = 120
         self.K_2_industrial = 350
+        self.K_3_industrial = 350
+        
+        self.timeKoefValue = 0
+        self.tempDelta = 0
+        
 
+        #alram
+        self.needAlram = False
+        self.mute = False
         self.spaceValue = 10.
 
         # pid models
         self.pidModule = PID(23)
-        self.pidModuleIndustrial = IndustrialPID()
+        self.pidModuleIndustrial = IndustrialPIDV2()
         
+        try:
+            with open('pidParams.conf', 'r') as file:
+                data = file.read()
+                data = data.split(' ')
+                res = list(map(lambda elem: float(elem), data))
+                self.pidModule.k1 = res[0]
+                self.pidModule.k2 = res[1]
+                self.pidModule.k3 = res[2]
+                self.pidModule.k4 = res[3]
+                self.pidModule.k5 = res[4]
+                self.timeKoefValue = int(res[5])
+                
+                self.pidModuleIndustrial.k1 = res[6]
+                self.pidModuleIndustrial.k2 = res[7]
+                self.pidModuleIndustrial.k3 = res[8]
+        except Exception as e:
+            print('\n\n\n\n\nread params error', e)
+        
+        self.lastSSTime = None
         
         
         # motors
         self.needShuffle = False
+        self.smashSpeed = 0
+        
         self.needSearch0 = False
         self.needGoHome = False
         self.commandMotorVerticalIsRunning = False
@@ -71,15 +110,35 @@ class ViewState:
         self.needMoveDistance = False
         
         self.currentDeep = None
+        self.zeroDeep = None
         self.targetDeep = 0
         self.needUpdateDeepth = False
         self.needStopVertical = False
         
+        self.needSearchZero = False
+        
         # powersupply
         self.targetAmperage = 0
+        self.amperageSpace = 0.5
         self.realAmperage = None
+        self.powerIsOn = False
+        
+        #voltage
+        self.realVolrage = None
+        
+        #thermocouple
+        self.needSaveThermocouple=False
+        
+        #errors
+        self.heaterError        = True
+        self.powerError         = True
+        self.thermocouple1Error = True
+        self.thermocouple2Error = True
+        self.motor1Error        = True
+        self.motor2Error        = True
         
     def configPidParams(self):
+        
         self.pidModule.k1 = self.K_1
         self.pidModule.k2 = self.K_2
         self.pidModule.k3 = self.K_3
@@ -88,6 +147,7 @@ class ViewState:
         
         self.pidModuleIndustrial.k1 = self.K_1_industrial
         self.pidModuleIndustrial.k2 = self.K_2_industrial
+        self.pidModuleIndustrial.k3 = self.K_3_industrial
     
     def getPower(self, curT, refT):
         if self.selectedPID == 'Промышленная':
@@ -214,6 +274,8 @@ class ViewState:
         self.playTime2 = None
         self.pauseTime2 = None
         self.pauseDuration2 = 0
+        
+        self.currentTime = None
    
     
         

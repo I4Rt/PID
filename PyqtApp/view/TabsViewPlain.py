@@ -26,6 +26,8 @@ from data.FSTargetDataMeasurement import *
 from data.FSRealDataMeasurement import *
 from data.SSRealDataMeasurement import *
 
+from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
+
 class Ui_MainWindow(object):
     def __init__(self, *args, **kwargs):
         # self.ser = ser
@@ -120,8 +122,12 @@ class Ui_MainWindow(object):
             
             self.label_1_ind.hide()
             self.label_2_ind.hide()
+            self.label_3_ind.hide()
+            self.label_temp_ind.hide()
             self.k1_ind_input.hide()
             self.k2_ind_input.hide()
+            self.k3_ind_input.hide()
+            self.temp_ind_input.hide()
         elif self.state.selectedPID == 'Промышленная':
             self.label.hide()
             self.label_2.hide()
@@ -136,8 +142,13 @@ class Ui_MainWindow(object):
             
             self.label_1_ind.show()
             self.label_2_ind.show()
+            self.label_3_ind.show()
+            self.label_temp_ind.show()
             self.k1_ind_input.show()
             self.k2_ind_input.show()
+            self.k3_ind_input.show()
+            self.temp_ind_input.show()
+        
         else:
             self.label.hide()
             self.label_2.hide()
@@ -152,8 +163,12 @@ class Ui_MainWindow(object):
             
             self.label_1_ind.hide()
             self.label_2_ind.hide()
+            self.label_3_ind.hide()
+            self.label_temp_ind.hide()
             self.k1_ind_input.hide()
             self.k2_ind_input.hide()
+            self.k3_ind_input.hide()
+            self.temp_ind_input.hide()
         
     def clearTable(self):
         model = self.tableWidget.model()
@@ -275,18 +290,29 @@ class Ui_MainWindow(object):
         self.saver.start()
         
         self.state.playPlot1()
-        self.controlThread.play()
+        # self.controlThread.play()
         
     def pausePID1(self):
         self.saver.stop()
         
         self.state.pausePlot1()
-        self.controlThread.pause()
+        # self.controlThread.pause()
     
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1099, 730)
-    
+        
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        
+
+        
+        
+        
+        
+        
+        
         
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -315,9 +341,6 @@ class Ui_MainWindow(object):
         self.label_9.setObjectName("label_9")
         self.gridLayout_4.addWidget(self.label_9, 0, 1, 1, 1)
         self.label_10 = QtWidgets.QLabel(self.tab_6)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setWeight(75)
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.gridLayout_4.addWidget(self.label_10, 1, 1, 1, 1)
@@ -328,10 +351,7 @@ class Ui_MainWindow(object):
         self.label_11.setObjectName("label_11")
         self.gridLayout_6.addWidget(self.label_11, 0, 0, 1, 1)
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.tab_6)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.plainTextEdit.sizePolicy().hasHeightForWidth())
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.plainTextEdit.setSizePolicy(sizePolicy)
         self.plainTextEdit.setPlainText("")
         self.plainTextEdit.setObjectName("plainTextEdit")
@@ -344,16 +364,25 @@ class Ui_MainWindow(object):
         
         self.saveExpButton = QtWidgets.QPushButton()
         self.horizontalLayout_4.addWidget(self.saveExpButton)
-        self.dropExpButton = QtWidgets.QPushButton()
-        self.horizontalLayout_4.addWidget(self.dropExpButton)
+        self.copyExpButton = QtWidgets.QPushButton()
+        self.horizontalLayout_4.addWidget(self.copyExpButton)
         self.deleteExpButton = QtWidgets.QPushButton()
         self.horizontalLayout_4.addWidget(self.deleteExpButton)
-        spacerItem0 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem0)
+        self.dropExpButton = QtWidgets.QPushButton()
+        self.horizontalLayout_4.addWidget(self.dropExpButton)
+        self.loadExpButton = QtWidgets.QPushButton()
+        self.horizontalLayout_4.addWidget(self.loadExpButton)
+        
+        # spacerItem0 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        # self.horizontalLayout_4.addItem(spacerItem0)
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
         
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_2.addItem(spacerItem1)
+        
+        self.excelExportButton = QtWidgets.QPushButton()
+        self.excelExportButton.setObjectName('excelExportButton')
+        self.verticalLayout_2.addWidget(self.excelExportButton)
+        
+        
         self.gridLayout_5.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
         self.tabWidget.addTab(self.tab_6, "")
         self.tab_5 = QtWidgets.QWidget()
@@ -372,6 +401,7 @@ class Ui_MainWindow(object):
         self.graphicsView = MatplotlibWidget(self.centralwidget)
         self.subplot = self.graphicsView.getFigure().add_subplot()
         self.subplot.grid()
+        self.subplot.xaxis.set_major_locator(MultipleLocator(20))
         # self.subplot.set_xlim(0, 400)
         # self.subplot.set_ylim(0, 400)
         self.gridLayout_3.addWidget(self.graphicsView, 3, 1, 1, 1)
@@ -464,6 +494,7 @@ class Ui_MainWindow(object):
         
         self.addTableRowButton = QtWidgets.QPushButton(self.tab_5)
         self.addTableRowButton.setObjectName("addTableRowButton")
+        self.addTableRowButton.setFixedHeight(60)
         self.addTableRowButton.clicked.connect(self.addTableRow)
         self.gridLayout_3.addWidget(self.addTableRowButton, 4, 0, 1, 1)
             
@@ -481,12 +512,20 @@ class Ui_MainWindow(object):
         
         
         
+        self.timeKoefLabel = QtWidgets.QLabel()
+        self.timeKoefSpinBox =  QtWidgets.QSpinBox()
+        self.timeKoefSpinBox.setMinimum(0)
+        self.timeKoefSpinBox.setMaximum(900)
+        self.verticalLayout.addWidget(self.timeKoefLabel)
+        self.verticalLayout.addWidget(self.timeKoefSpinBox)
         
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
         self.k1_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.k1_input.setObjectName("k1_input")
+        self.k1_input.setDecimals(4)
+        self.k1_input.setSingleStep(0.01)
         self.k1_input.valueChanged.connect(lambda: self.setK_1(self.k1_input.value()))
         self.verticalLayout.addWidget(self.k1_input)
         
@@ -495,6 +534,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_2)
         self.k2_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.k2_input.setObjectName("k2_input")
+        self.k2_input.setDecimals(4)
+        self.k2_input.setSingleStep(0.01)
         self.verticalLayout.addWidget(self.k2_input)
         self.k2_input.valueChanged.connect(lambda: self.setK_2(self.k2_input.value()))
         
@@ -503,6 +544,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_3)
         self.k3_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.k3_input.setObjectName("k3_input")
+        self.k3_input.setDecimals(4)
+        self.k3_input.setSingleStep(0.01)
         self.verticalLayout.addWidget(self.k3_input)
         self.k3_input.valueChanged.connect(lambda: self.setK_3(self.k3_input.value()))
         
@@ -511,6 +554,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_4)
         self.k4_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.k4_input.setObjectName("k4_input")
+        self.k4_input.setDecimals(4)
+        self.k4_input.setSingleStep(0.01)
         self.k4_input.valueChanged.connect(lambda: self.setK_4(self.k4_input.value()))
         self.verticalLayout.addWidget(self.k4_input)
         
@@ -519,6 +564,8 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label_5)
         self.k5_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.k5_input.setObjectName("k5_input")
+        self.k5_input.setDecimals(4)
+        self.k5_input.setSingleStep(0.01)
         self.k5_input.valueChanged.connect(lambda: self.setK_5(self.k5_input.value()))
         self.verticalLayout.addWidget(self.k5_input)
         
@@ -539,23 +586,35 @@ class Ui_MainWindow(object):
         self.k2_ind_input.valueChanged.connect(lambda: self.setK_2_industrial(self.k2_ind_input.value()))
         self.verticalLayout.addWidget(self.k2_ind_input)
         
+        self.label_3_ind = QtWidgets.QLabel(self.centralwidget)
+        self.label_3_ind.setObjectName("label_3_ind")
+        self.verticalLayout.addWidget(self.label_3_ind)
+        self.k3_ind_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.k3_ind_input.setObjectName("k3_ind_input")
+        self.k3_ind_input.valueChanged.connect(lambda: self.setK_3_industrial(self.k3_ind_input.value()))
+        self.verticalLayout.addWidget(self.k3_ind_input)
+        
+        self.label_temp_ind = QtWidgets.QLabel(self.centralwidget)
+        self.label_temp_ind.setObjectName("label_temp_ind")
+        self.verticalLayout.addWidget(self.label_temp_ind)
+        self.temp_ind_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.temp_ind_input.setObjectName("temp_ind_input")
+        self.temp_ind_input.setDisabled(True)
+        # self.temp_ind_input.valueChanged.connect(lambda: self.setK_temp_industrial(self.temp_ind_input.value()))
+        self.verticalLayout.addWidget(self.temp_ind_input)
+    
         
         
         
-        self.line_5 = QtWidgets.QFrame(self.tab_5)
-        self.line_5.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_5.setObjectName("line_5")
-        self.verticalLayout.addWidget(self.line_5)
+        self.space_temperature_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.space_temperature_input.setObjectName("space_temperature_input")
+        self.space_temperature_input.valueChanged.connect(lambda: self.setTemperatureSpaceValue(self.space_temperature_input.value()))
+        self.space_temperature_input.setMaximumWidth(100)
         
-        
-        self.label_space = QtWidgets.QLabel(self.centralwidget)
-        self.label_space.setObjectName("label_space")
-        self.verticalLayout.addWidget(self.label_space)
-        self.space_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.space_input.setObjectName("space_input")
-        self.space_input.valueChanged.connect(lambda: self.setSpaceValue(self.space_input.value()))
-        self.verticalLayout.addWidget(self.space_input)
+        self.space_amperage_input = QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.space_amperage_input.setObjectName("space_amperage_input")
+        self.space_amperage_input.valueChanged.connect(lambda: self.setAmperageSpaceValue(self.space_amperage_input.value()))
+        self.space_amperage_input.setMaximumWidth(100)
         
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem2)
@@ -581,21 +640,56 @@ class Ui_MainWindow(object):
         self.label_6.setObjectName("label_6")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_6)
         self.gridLayout_3.addLayout(self.formLayout, 1, 1, 1, 1)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.start_btn = QtWidgets.QPushButton(self.tab_5)
-        self.start_btn.setObjectName("start_btn")
-        self.horizontalLayout_2.addWidget(self.start_btn)
-        self.stop_btn = QtWidgets.QPushButton(self.tab_5)
-        self.stop_btn.setObjectName("stop_btn")
-        self.horizontalLayout_2.addWidget(self.stop_btn)
         
+        
+        
+        self.gridLatoutPrepareTaskActions = QtWidgets.QGridLayout()
+        self.gridLatoutPrepareTaskActions.setObjectName("gridLatoutPrepareTaskActions")
+        
+        
+        self.actionLabel_1 = QtWidgets.QLabel()
+        self.free_real_track_btn = QtWidgets.QPushButton()
+        self.actionLabel_2 = QtWidgets.QLabel()
+        self.spacer_1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.spacer_2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        
+        self.label_010 = QtWidgets.QLabel()
+        self.realTemperature_1= QtWidgets.QLineEdit()
+        self.realTemperature_1.setDisabled(True)
+        self.realTemperature_1.setMaximumWidth(100)
+        
+        self.label_101 = QtWidgets.QLabel()
+        self.realPower_1= QtWidgets.QLineEdit()
+        self.realPower_1.setDisabled(True)
+        self.realPower_1.setMaximumWidth(100)
+        
+        
+        self.start_btn = QtWidgets.QPushButton(self.tab_5)
+        self.stop_btn = QtWidgets.QPushButton(self.tab_5)
+        
+        self.gridLatoutPrepareTaskActions.addWidget(self.actionLabel_1, 0,0,1,1)
+        self.gridLatoutPrepareTaskActions.addWidget(self.free_real_track_btn, 0,2,1,1)
+        self.gridLatoutPrepareTaskActions.addWidget(self.actionLabel_2, 1,0,1,1)
+        
+        self.gridLatoutPrepareTaskActions.addWidget(self.start_btn, 1,1,1,1)
+        self.gridLatoutPrepareTaskActions.addWidget(self.stop_btn, 1,2,1,1)
+
+        self.gridLatoutPrepareTaskActions.addItem(self.spacer_1, 0,3,1,1)
+        self.gridLatoutPrepareTaskActions.addItem(self.spacer_2, 1,3,1,1)
+        
+        self.gridLatoutPrepareTaskActions.addWidget(self.label_101, 0,4,1,1)
+        self.gridLatoutPrepareTaskActions.addWidget(self.realPower_1, 0,5,1,1)
+        self.gridLatoutPrepareTaskActions.addWidget(self.label_010, 1,4,1,1)
+        self.gridLatoutPrepareTaskActions.addWidget(self.realTemperature_1, 1,5,1,1)
         # self.start_btn.clicked.connect(self.startPID1)
         # self.stop_btn.clicked.connect(self.pausePID1)
         
         
-        self.gridLayout_3.addLayout(self.horizontalLayout_2, 4, 1, 1, 1)
+        
+        
+        self.gridLayout_3.addLayout(self.gridLatoutPrepareTaskActions, 4, 1, 1, 1)
         self.tabWidget.addTab(self.tab_5, "")
+        self.tabWidget
         self.tab_7 = QtWidgets.QWidget()
         self.tab_7.setObjectName("tab_7")
         self.gridLayout_8 = QtWidgets.QGridLayout(self.tab_7)
@@ -609,94 +703,303 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.label_12.setFont(font)
         self.label_12.setObjectName("label_12")
-        self.verticalLayout_3.addWidget(self.label_12)
-        self.line_3 = QtWidgets.QFrame(self.tab_7)
-        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_3.setObjectName("line_3")
-        self.verticalLayout_3.addWidget(self.line_3)
+        
+        
         self.label_15 = QtWidgets.QLabel(self.tab_7)
         self.label_15.setObjectName("label_15")
-        self.verticalLayout_3.addWidget(self.label_15)
         self.doubleSpinBox = QtWidgets.QDoubleSpinBox(self.tab_7)
         self.doubleSpinBox.setObjectName("doubleSpinBox")
-        
-        self.verticalLayout_3.addWidget(self.doubleSpinBox)
-        self.gridLayout_7 = QtWidgets.QGridLayout()
-        self.gridLayout_7.setObjectName("gridLayout_7")
+        self.doubleSpinBox.setMaximumWidth(100)
+    
         self.startTest = QtWidgets.QPushButton(self.tab_7)
         self.startTest.setObjectName("startTest")
-        self.gridLayout_7.addWidget(self.startTest, 1, 0, 1, 1)
+        self.startTest.setMaximumWidth(100)
         self.stopTest = QtWidgets.QPushButton(self.tab_7)
         self.stopTest.setObjectName("stopTest")
-        self.gridLayout_7.addWidget(self.stopTest, 1, 1, 1, 1)
-        self.verticalLayout_3.addLayout(self.gridLayout_7)
-        self.line_2 = QtWidgets.QFrame(self.tab_7)
-        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_2.setObjectName("line_2")
-        self.verticalLayout_3.addWidget(self.line_2)
+        self.stopTest.setMaximumWidth(100)
+        
+        self.gridLayout_0 = QtWidgets.QGridLayout()
+        self.gridLayout_0.setObjectName('gridLayout_0')
+        
+        
+        self.allertLabel_1 = QtWidgets.QLabel()
+        self.allertLabel_1.setObjectName('allertLabel_1')
+        self.allertLabel_1.setFont(font)
+        # self.allertLabel_1.setMaximumWidth(200)
+        self.allertIndicator = QtWidgets.QLabel()
+        self.allertIndicator.setStyleSheet("QLabel {background-color : gray; border-color : black; border-width : 1px; border-style : solid; border-radius : 3px; min-height: 20px; min-width: 20px; max-height:20px}")
+        self.allertIndicator.setObjectName("allertIndicator")
+        
+        self.allertLabel_2 = QtWidgets.QLabel()
+        self.allertLabel_2.setObjectName('allertLabel_2')
+        # self.allertLabel_2.setMaximumWidth(200)
+        
+        self.allertLabel_3 = QtWidgets.QLabel()
+        self.allertLabel_3.setObjectName('allertLabel_3')
+        # self.allertLabel_3.setMaximumWidth(200)
+        
+        self.muteButton = QtWidgets.QPushButton()
+        self.muteButton.setObjectName('muteButton')
+        self.muteButton.setMaximumWidth(100)
+        # self.unmuteButton = QtWidgets.QPushButton()
+        # self.unmuteButton.setObjectName('unmuteButton')
+        # self.unmuteButton.setMaximumWidth(100)
+        
+        self.spaceTemperatureLabel = QtWidgets.QLabel()
+        self.spaceAmperageLabel = QtWidgets.QLabel()
+        self.spaceTemperatureLabel.setMaximumWidth(100)
+        self.spaceAmperageLabel.setMaximumWidth(100)
+        
+        self.gridLayout_0.addWidget(self.allertLabel_2, 0,0,1,2)
+        self.gridLayout_0.addWidget(self.allertIndicator, 0,2,1,1)
+        self.gridLayout_0.addWidget(self.allertLabel_3, 2,0,1,2)
+        self.gridLayout_0.addWidget(self.muteButton, 2,2,1,1)
+        # self.gridLayout_0.addWidget(self.unmuteButton, 2,2,1,1)
+        
+        # self.gridLayout_0.addWidget(self.unmuteButton, 2,2,1,1)
+        # self.gridLayout_0.addWidget(self.unmuteButton, 2,2,1,1)
+        
+        self.gridLayout_0.addWidget(self.spaceTemperatureLabel, 3,0,1,2)
+        self.gridLayout_0.addWidget(self.spaceAmperageLabel, 4,0,1,2)
+        self.gridLayout_0.addWidget(self.space_temperature_input, 3,2,1,1)
+        self.gridLayout_0.addWidget(self.space_amperage_input, 4,2,1,1)
+        
+        self.verticalLayout_3.addWidget(self.allertLabel_1)
+        self.verticalLayout_3.addLayout(self.gridLayout_0)
+        
+        self.line_10 = QtWidgets.QFrame()
+        self.line_10.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_10.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_10.setObjectName("line_10")
+        # self.line_10.setMaximumWidth(200)
+        self.verticalLayout_3.addWidget(self.line_10)
+        
+        
+        
+        
         self.label_16 = QtWidgets.QLabel(self.tab_7)
         self.label_16.setObjectName("label_16")
+        self.label_16.setFont(font)
+        # self.label_16.setMaximumWidth(200)
         self.verticalLayout_3.addWidget(self.label_16)
         self.gridLayout_9 = QtWidgets.QGridLayout()
         self.gridLayout_9.setObjectName("gridLayout_9")
+        
+        
         #row0
         self.label_003 = QtWidgets.QLabel(self.tab_7)
         self.label_003.setObjectName("label_003")
+        # self.label_003.setMaximumWidth(200)
         self.gridLayout_9.addWidget(self.label_003, 0, 0, 1, 1)
         self.baseSearch = QtWidgets.QPushButton(self.tab_7)
         self.baseSearch.setObjectName("baseSearch")
+        self.baseSearch.setMaximumWidth(100)
         self.gridLayout_9.addWidget(self.baseSearch, 0, 2, 1, 1)
         #row1
         self.label_17 = QtWidgets.QLabel(self.tab_7)
         self.label_17.setObjectName("label_17")
+        # self.label_17.setMaximumWidth(200)
         self.gridLayout_9.addWidget(self.label_17, 1, 0, 1, 1)
         self.zeroSearch = QtWidgets.QPushButton(self.tab_7)
+        self.zeroSearch.setMaximumWidth(100)
         self.zeroSearch.setObjectName("zeroSearch")
         self.gridLayout_9.addWidget(self.zeroSearch, 1, 2, 1, 1)
         #row2
         self.label_001 = QtWidgets.QLabel(self.tab_7)
         self.label_001.setObjectName("label_001")
+        # self.label_001.setMaximumWidth(200)
         self.gridLayout_9.addWidget(self.label_001, 2, 0, 1, 1)
-        self.realDeepLabel= QtWidgets.QLabel(self.tab_7)
+        self.realDeepLabel= QtWidgets.QLineEdit(self.tab_7)
         self.realDeepLabel.setObjectName("realDeepLabel")
+        self.realDeepLabel.setMaximumWidth(60)
+        self.realDeepLabel.setSizePolicy(QtWidgets.QSizePolicy.Fixed,QtWidgets.QSizePolicy.Fixed)
+        self.realDeepLabel.setDisabled(True)
         self.gridLayout_9.addWidget(self.realDeepLabel, 2, 1, 1, 1)
+        #row2_1
+        self.label_001_1 = QtWidgets.QLabel(self.tab_7)
+        self.label_001_1.setObjectName("label_001_1")
+        # self.label_001_1.setMaximumWidth(200)
+        self.gridLayout_9.addWidget(self.label_001_1, 3, 0, 1, 1)
+        self.realDeepLabelOfZero= QtWidgets.QLineEdit(self.tab_7)
+        self.realDeepLabelOfZero.setObjectName("realDeepLabelOfZero")
+        self.realDeepLabelOfZero.setMaximumWidth(60)
+        self.realDeepLabelOfZero.setSizePolicy(QtWidgets.QSizePolicy.Fixed,QtWidgets.QSizePolicy.Fixed)
+        self.realDeepLabelOfZero.setDisabled(True)
+        self.gridLayout_9.addWidget(self.realDeepLabelOfZero, 3, 1, 1, 1)
         #row3
         self.label_002 = QtWidgets.QLabel(self.tab_7)
         self.label_002.setObjectName("label_002")
-        self.gridLayout_9.addWidget(self.label_002, 3, 0, 1, 1)
+        # self.label_002.setMaximumWidth(200)
+        self.gridLayout_9.addWidget(self.label_002, 4, 0, 1, 1)
         self.targetDeepSpinBox = QtWidgets.QSpinBox(self.tab_7)
         self.targetDeepSpinBox.setObjectName("targetDeepSpinBox")
-        self.gridLayout_9.addWidget(self.targetDeepSpinBox, 3, 1, 1, 1)
+        self.gridLayout_9.addWidget(self.targetDeepSpinBox, 4, 1, 1, 1)
         self.setTargetDeep = QtWidgets.QPushButton(self.tab_7)
         self.setTargetDeep.setObjectName("setTargetDeep")
-        self.gridLayout_9.addWidget(self.setTargetDeep, 3, 2, 1, 1)
+        self.setTargetDeep.setMaximumWidth(100)
+        self.gridLayout_9.addWidget(self.setTargetDeep, 4, 2, 1, 1)
         #row4
         self.label_18 = QtWidgets.QLabel(self.tab_7)
         self.label_18.setObjectName("label_18")
-        self.gridLayout_9.addWidget(self.label_18, 4, 0, 1, 1)
+        # self.label_18.setMaximumWidth(200)
+        self.gridLayout_9.addWidget(self.label_18, 5, 0, 1, 1)
+        #row5
+        self.label_0031 = QtWidgets.QLabel(self.tab_7)
+        self.label_0031.setObjectName("label_0031")
+        # self.label_0031.setMaximumWidth(200)
+        self.gridLayout_9.addWidget(self.label_0031, 6, 0, 1, 1)
+        self.stopMotorBtn = QtWidgets.QPushButton(self.tab_7)
+        self.stopMotorBtn.setObjectName("baseSearch")
+        self.stopMotorBtn.setMaximumWidth(100)
+        self.gridLayout_9.addWidget(self.stopMotorBtn, 6, 2, 1, 1)
+        
+        
+        self.doubleSpinBoxSmash = QtWidgets.QDoubleSpinBox(self.tab_7)
+        self.doubleSpinBoxSmash.setMaximumWidth(100)
+        self.doubleSpinBoxSmash.setMaximum(240)
+        self.doubleSpinBoxSmash.setMinimum(-240)
+        self.gridLayout_9.addWidget(self.doubleSpinBoxSmash, 5, 1, 1, 1)
+        
         self.smashSwitch = QtWidgets.QPushButton(self.tab_7)
         self.smashSwitch.setObjectName("smashSwitch")
-        self.gridLayout_9.addWidget(self.smashSwitch, 4, 2, 1, 1)
+        self.smashSwitch.setMaximumWidth(100)
+        self.gridLayout_9.addWidget(self.smashSwitch, 5, 2, 1, 1)
         
         self.verticalLayout_3.addLayout(self.gridLayout_9)
         self.line = QtWidgets.QFrame(self.tab_7)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
+        # self.line.setMaximumWidth(200)
         self.verticalLayout_3.addWidget(self.line)
+        
         self.label_19 = QtWidgets.QLabel(self.tab_7)
         self.label_19.setObjectName("label_19")
+        # self.label_19.setMaximumWidth(200)
         self.verticalLayout_3.addWidget(self.label_19)
+        
+        
+        
+        
+        # Управление током
+        self.label_004 = QtWidgets.QLabel()
+        self.label_004.setObjectName('label_004')
+        self.label_004.setFont(font)
+        
+        self.label_005 = QtWidgets.QLabel()
+        self.label_005.setObjectName('label_005')
+        self.label_008 = QtWidgets.QLabel() # сила тока
+        self.label_008.setMaximumWidth(150)
+        self.label_009 = QtWidgets.QLabel() # напряжение
+        self.label_009.setMaximumWidth(150)
+        
+        
+        
+        self.amperageDoubleSpinBox = QtWidgets.QDoubleSpinBox()
+        self.amperageDoubleSpinBox.setObjectName("amperageDoubleSpinBox")
+        self.amperageDoubleSpinBox.setMinimum(0) #TODO set max min values
+        self.amperageDoubleSpinBox.setMaximum(100) #TODO set max min values
+        
+        self.setPowerButton = QtWidgets.QPushButton()
+        self.setPowerButton.setObjectName('setPowerButton')
+        self.setPowerButton.setMaximumWidth(100)
+        
+        self.gridLayout_12 = QtWidgets.QGridLayout()
+        self.gridLayout_12.setObjectName('gridLayout_12')
+        
+        self.realAmperage= QtWidgets.QLineEdit()
+        self.realAmperage.setDisabled(True)
+        self.realAmperage.setMaximumWidth(100)
+        
+        self.realVoltage= QtWidgets.QLineEdit()
+        self.realVoltage.setDisabled(True)
+        self.realVoltage.setMaximumWidth(100)
+        
+        self.gridLayout_12.addWidget(self.label_005, 0,0,1,1)
+        self.gridLayout_12.addWidget(self.amperageDoubleSpinBox, 0,1,1,1)
+        self.gridLayout_12.addWidget(self.setPowerButton, 0,2,1,1)
+        
+        self.gridLayout_12.addWidget(self.label_008, 1,0,1,1)
+        self.gridLayout_12.addWidget(self.realAmperage, 1,1,1,1)
+        self.gridLayout_12.addWidget(self.label_009, 2,0,1,1)
+        self.gridLayout_12.addWidget(self.realVoltage, 2,1,1,1)
+        
+        self.verticalLayout_3.addWidget(self.label_004)
+        self.verticalLayout_3.addLayout(self.gridLayout_12)
+        
+        
+        self.indipendentTitleLabel = QtWidgets.QLabel() # напряжение
+        self.indipendentTitleLabel.setFont(font)
+        # self.indipendentTitleLabel.setMaximumWidth(200)
+        
+        self.label_321 = QtWidgets.QLabel() # напряжение
+        self.label_321.setMaximumWidth(100)
+        # self.label_321.setMinimumWidth(128)
+        
+        
+        self.statusTemperature= QtWidgets.QLineEdit()
+        self.statusTemperature.setDisabled(True)
+        self.statusTemperature.setMaximumWidth(100)
+        
+        
+        self.spacerLabel = QtWidgets.QLabel()
+        self.spacerLabel.setMaximumWidth(140)
+        
+        # self.spacer_4 = QtWidgets.QSpacerItem(100, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        # self.gridLayout.addItem(self.spacer_4, 2,0,1,1)
+        
+        
+        self.gridLayout_13 = QtWidgets.QHBoxLayout()
+        self.gridLayout_13.setObjectName('gridLayout_13')
+        
+        self.gridLayout_13.addWidget(self.label_321)
+        self.gridLayout_13.addWidget(self.spacerLabel)
+        self.gridLayout_13.addWidget(self.statusTemperature)
+        
+        self.label_3210 = QtWidgets.QLabel() # Время
+        self.label_3210.setMaximumWidth(100)
+        
+        self.statusTime= QtWidgets.QLineEdit()
+        self.statusTime.setDisabled(True)
+        self.statusTime.setMaximumWidth(100)
+
+        self.spacerLabel1 = QtWidgets.QLabel()
+        self.spacerLabel1.setMaximumWidth(140)
+        
+        
+        self.gridLayout_14 = QtWidgets.QHBoxLayout()
+        self.gridLayout_14.setObjectName('gridLayout_13')
+        
+        self.gridLayout_14.addWidget(self.label_3210)
+        self.gridLayout_14.addWidget(self.spacerLabel1)
+        self.gridLayout_14.addWidget(self.statusTime)
+        
+        # self.spacerLabel = QtWidgets.QLabel()
+        # self.spacerLabel.setMaximumWidth(100)
+        # self.gridLayout_13.addWidget(self.spacerLabel, 0, 2, 1, 1)
+        
+        
+        self.lineInd = QtWidgets.QFrame(self.tab_7)
+        self.lineInd.setFrameShape(QtWidgets.QFrame.HLine)
+        self.lineInd.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.lineInd.setObjectName("lineInd")
+        # self.lineInd.setMaximumWidth(200)
+        
+        self.verticalLayout_3.addWidget(self.lineInd)
+        self.verticalLayout_3.addWidget(self.indipendentTitleLabel)
+        self.verticalLayout_3.addLayout(self.gridLayout_13)
+        self.verticalLayout_3.addLayout(self.gridLayout_14)
+        
         self.textEdit = QtWidgets.QTextEdit(self.tab_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
         self.textEdit.setSizePolicy(sizePolicy)
         self.textEdit.setObjectName("textEdit")
-        self.verticalLayout_3.addWidget(self.textEdit)
+        self.textEdit.setFixedHeight(148)
+        self.textEdit.setMaximumHeight(148)
+        
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.submitComment = QtWidgets.QPushButton(self.tab_7)
@@ -705,44 +1008,258 @@ class Ui_MainWindow(object):
         self.pushButton_4 = QtWidgets.QPushButton(self.tab_7)
         self.pushButton_4.setObjectName("pushButton_4")
         self.horizontalLayout_3.addWidget(self.pushButton_4)
-        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem3)
-        self.gridLayout_8.addLayout(self.verticalLayout_3, 0, 1, 1, 1)
+        
+        
+        
+        self.gridLayout.addLayout(self.verticalLayout_3, 0, 1, 2, 1)
+        self.statuses = QtWidgets.QGridLayout()
+        self.statuses.setObjectName("statuses")
+        self.power_label = QtWidgets.QLabel(self.centralwidget)
+        self.power_label.setObjectName("power_label")
+        self.statuses.addWidget(self.power_label, 2, 1, 1, 1)
+        self.temperature1_label = QtWidgets.QLabel(self.centralwidget)
+        self.temperature1_label.setObjectName("temperature1_label")
+        self.statuses.addWidget(self.temperature1_label, 1, 5, 1, 1)
+        self.motor2_status = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.motor2_status.setFont(font)
+        self.motor2_status.setObjectName("motor2_status")
+        self.statuses.addWidget(self.motor2_status, 2, 8, 1, 1)
+        self.temperature1_status = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.temperature1_status.setFont(font)
+        self.temperature1_status.setObjectName("temperature1_status")
+        self.statuses.addWidget(self.temperature1_status, 1, 6, 1, 1)
+        self.power_status = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.power_status.setFont(font)
+        self.power_status.setObjectName("power_status")
+        self.statuses.addWidget(self.power_status, 2, 2, 1, 1)
+        self.com_label = QtWidgets.QLabel(self.centralwidget)
+        self.com_label.setObjectName("com_label")
+        self.statuses.addWidget(self.com_label, 0, 1, 1, 1)
+        self.temperature2_label = QtWidgets.QLabel(self.centralwidget)
+        self.temperature2_label.setObjectName("temperature2_label")
+        self.statuses.addWidget(self.temperature2_label, 2, 5, 1, 1)
+        self.current_com = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.current_com.setFont(font)
+        self.current_com.setObjectName("current_com")
+        self.statuses.addWidget(self.current_com, 0, 2, 1, 1)
+        self.heat_status = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.heat_status.setFont(font)
+        self.heat_status.setObjectName("heat_status")
+        self.statuses.addWidget(self.heat_status, 1, 2, 1, 1)
+        self.motor1_status = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.motor1_status.setFont(font)
+        self.motor1_status.setObjectName("motor1_status")
+        self.statuses.addWidget(self.motor1_status, 1, 8, 1, 1)
+        self.motor2_label = QtWidgets.QLabel(self.centralwidget)
+        self.motor2_label.setObjectName("motor2_label")
+        self.statuses.addWidget(self.motor2_label, 2, 7, 1, 1)
+        self.heat_label = QtWidgets.QLabel(self.centralwidget)
+        self.heat_label.setObjectName("heat_label")
+        self.statuses.addWidget(self.heat_label, 1, 1, 1, 1)
+        self.temperature2_status = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.temperature2_status.setFont(font)
+        self.temperature2_status.setObjectName("temperature2_status")
+        self.statuses.addWidget(self.temperature2_status, 2, 6, 1, 1)
+        self.motor1_label = QtWidgets.QLabel(self.centralwidget)
+        self.motor1_label.setObjectName("motor1_label")
+        self.statuses.addWidget(self.motor1_label, 1, 7, 1, 1)
+        
+        self.spacer_3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.statuses.addItem(self.spacer_3, 1, 9, 1, 1)
+        
+        self.gridLayout.addLayout(self.statuses, 0, 0, 1, 1)
+        
+        
+        
         self.verticalLayout_5 = QtWidgets.QVBoxLayout()
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.label_13 = QtWidgets.QLabel(self.tab_7)
-        self.label_13.setObjectName("label_13")
-        self.verticalLayout_5.addWidget(self.label_13)
+        
+        
         self.graphicsView_2 = MatplotlibWidget(self.tab_7)
         self.subplot2 = self.graphicsView_2.getFigure().add_subplot()
+        
+        self.graphicsView_2.getFigure().subplots_adjust(left=0.085, right=0.8, bottom=0.14, top=0.98)
+        
+        
         self.subplot2.grid()
+        self.subplot2.xaxis.set_major_locator(MultipleLocator(20))
         
         
         
+        self.voltageSubplot = self.subplot2.twinx()
+        self.amperateSubplot = self.subplot2.twinx()
         
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(self.graphicsView_2.sizePolicy().hasHeightForWidth())
         self.graphicsView_2.setSizePolicy(sizePolicy)
         self.graphicsView_2.setMinimumSize(QtCore.QSize(0, 350))
-        self.graphicsView_2.setMaximumSize(QtCore.QSize(16777215, 350))
+        # self.graphicsView_2.setMaximumSize(QtCore.QSize(16777215, 350))
         self.graphicsView_2.setObjectName("graphicsView_2")
-        self.verticalLayout_5.addWidget(self.graphicsView_2)
+        
         self.line_4 = QtWidgets.QFrame(self.tab_7)
         self.line_4.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_4.setObjectName("line_4")
-        self.verticalLayout_5.addWidget(self.line_4)
+        
         self.label_14 = QtWidgets.QLabel(self.tab_7)
         self.label_14.setObjectName("label_14")
-        self.verticalLayout_5.addWidget(self.label_14)
+        
         self.textBrowser = QtWidgets.QTextBrowser(self.tab_7)
         self.textBrowser.setObjectName("textBrowser")
-        self.verticalLayout_5.addWidget(self.textBrowser)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_5.addItem(spacerItem4)
+        self.textBrowser.setMaximumHeight(180)
+        
+        self.gridLayout_10 = QtWidgets.QGridLayout(self.tab_7)
+        self.gridLayout_10.setObjectName('gridLayout_10')
+        
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.tab_7)
+        self.verticalLayout_6.setObjectName('verticalLayout_6')
+        
+        self.verticalLayout_6.addWidget(self.textEdit)
+        self.verticalLayout_6.addLayout(self.horizontalLayout_3)
+        
+        self.gridLayout_10.addWidget(self.label_14, 0, 0, 1, 1)
+        self.gridLayout_10.addWidget(self.textBrowser, 1, 0, 1, 1)
+        
+        
+        self.backfillsLabel = QtWidgets.QLabel()
+        self.gridLayout_10.addWidget(self.backfillsLabel, 0, 1, 1, 1)
+        
+        self.backfillsGridLayout = QtWidgets.QGridLayout()
+        self.backfillsGridLayout.setObjectName("backfillsGridLayout")
+        self.inputBackfills_elem_1 = QtWidgets.QLineEdit(self.tab_7)
+        self.inputBackfills_elem_1.setObjectName("inputBackfills_elem_1")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_1, 0, 0, 1, 1)
+        self.inputBackfills_elem_value_1 = QtWidgets.QDoubleSpinBox(self.tab_7)
+        self.inputBackfills_elem_value_1.setObjectName("inputBackfills_elem_value_1")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_value_1, 0, 1, 1, 1)
+        self.inputBackfills_elem_2 = QtWidgets.QLineEdit(self.tab_7)
+        self.inputBackfills_elem_2.setObjectName("inputBackfills_elem_2")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_2, 1, 0, 1, 1)
+        self.inputBackfills_elem_value_2 = QtWidgets.QDoubleSpinBox(self.tab_7)
+        self.inputBackfills_elem_value_2.setObjectName("inputBackfills_elem_value_2")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_value_2, 1, 1, 1, 1)
+        self.inputBackfills_elem_3 = QtWidgets.QLineEdit(self.tab_7)
+        self.inputBackfills_elem_3.setObjectName("inputBackfills_elem_3")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_3, 2, 0, 1, 1)
+        self.inputBackfills_elem_value_3 = QtWidgets.QDoubleSpinBox(self.tab_7)
+        self.inputBackfills_elem_value_3.setObjectName("inputBackfills_elem_value_3")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_value_3, 2, 1, 1, 1)
+        self.inputBackfills_elem_4 = QtWidgets.QLineEdit(self.tab_7)
+        self.inputBackfills_elem_4.setObjectName("inputBackfills_elem_4")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_4, 3, 0, 1, 1)
+        self.inputBackfills_elem_value_4 = QtWidgets.QDoubleSpinBox(self.tab_7)
+        self.inputBackfills_elem_value_4.setObjectName("inputBackfills_elem_value_4")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_value_4, 3, 1, 1, 1)
+        
+        self.inputBackfills_elem_5 = QtWidgets.QLineEdit(self.tab_7)
+        self.inputBackfills_elem_5.setObjectName("inputBackfills_elem_5")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_5, 4, 0, 1, 1)
+        self.inputBackfills_elem_value_5 = QtWidgets.QDoubleSpinBox(self.tab_7)
+        self.inputBackfills_elem_value_5.setObjectName("inputBackfills_elem_value_5")
+        self.backfillsGridLayout.addWidget(self.inputBackfills_elem_value_5, 4, 1, 1, 1)
+        self.backfillRecordButton = QtWidgets.QPushButton(self.tab_7)
+        self.backfillRecordButton.setObjectName("backfillRecordButton")
+        self.backfillsGridLayout.addWidget(self.backfillRecordButton, 5, 0, 1, 2)
+        
+        self.inputBackfills_elem_1.setMaximumWidth(100)
+        self.inputBackfills_elem_value_1.setMaximumWidth(100)
+        self.inputBackfills_elem_2.setMaximumWidth(100)
+        self.inputBackfills_elem_value_2.setMaximumWidth(100)
+        self.inputBackfills_elem_3.setMaximumWidth(100)
+        self.inputBackfills_elem_value_3.setMaximumWidth(100)
+        self.inputBackfills_elem_4.setMaximumWidth(100)
+        self.inputBackfills_elem_value_4.setMaximumWidth(100)
+        self.inputBackfills_elem_5.setMaximumWidth(100)
+        self.inputBackfills_elem_value_5.setMaximumWidth(100)
+        
+        self.gridLayout_10.addLayout(self.backfillsGridLayout, 1, 1, 1, 1)
+        
+        
+        
+        
+        self.gridLayout_10.addWidget(self.label_19, 0, 2, 1, 1)
+        self.gridLayout_10.addLayout(self.verticalLayout_6, 1, 2, 1, 1)
+        
+        
+        
+        
+        self.label_102 = QtWidgets.QLabel()
+        self.realPower_2= QtWidgets.QLineEdit()
+        self.realPower_2.setDisabled(True)
+        self.realPower_2.setMaximumWidth(100)
+        
+        
+        self.realTemperature_2= QtWidgets.QLineEdit()
+        self.realTemperature_2.setDisabled(True)
+        self.realTemperature_2.setMaximumWidth(100)
+        self.realThermocouple= QtWidgets.QLineEdit()
+        self.realThermocouple.setDisabled(True)
+        self.realThermocouple.setMaximumWidth(100)
+        
+        self.saveThermocoupleBtn = QtWidgets.QPushButton()
+
+        self.label_006 = QtWidgets.QLabel() # печь
+        self.label_007 = QtWidgets.QLabel() # термопара
+        
+        
+        self.gridLayout_11 = QtWidgets.QGridLayout(self.tab_7)
+        self.gridLayout_11.setObjectName('gridLayout_11')
+        
+        self.gridLayout_11.addWidget(self.label_12, 0, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.startTest, 0, 1, 1, 1)
+        self.gridLayout_11.addWidget(self.stopTest, 0, 2, 1, 1)
+        
+        self.gridLayout_11.addWidget(self.label_15, 1, 0, 1, 1)
+        self.gridLayout_11.addWidget(self.doubleSpinBox, 1, 1, 1, 1)
+        
+        self.gridLayout_11.addWidget(self.label_006, 1, 2, 1, 1)
+        self.gridLayout_11.addWidget(self.realTemperature_2, 1, 3, 1, 1)
+        
+        self.gridLayout_11.addWidget(self.label_102, 0, 4, 1, 1)
+        self.gridLayout_11.addWidget(self.realPower_2, 0, 5, 1, 1)
+        self.gridLayout_11.addWidget(self.label_007, 1, 4, 1, 1)
+        self.gridLayout_11.addWidget(self.realThermocouple, 1, 5, 1, 1)
+        self.gridLayout_11.addWidget(self.saveThermocoupleBtn, 1, 6, 1, 1)
+        
+        self.gridLayout_11.addItem(QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed), 1, 7, 1, 1)
+        
+        self.verticalLayout_5.addLayout(self.gridLayout_11)
+        
+        self.verticalLayout_5.addWidget(self.graphicsView_2)
+        self.verticalLayout_5.addWidget(self.line_4)
+        
+        self.verticalLayout_5.addLayout(self.gridLayout_10)
+
+        
+        
+        # spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        # self.verticalLayout_5.addItem(spacerItem4)
         self.gridLayout_8.addLayout(self.verticalLayout_5, 0, 0, 1, 1)
         self.tabWidget.addTab(self.tab_7, "")
         self.gridLayout.addWidget(self.tabWidget, 1, 0, 1, 1)
@@ -756,6 +1273,8 @@ class Ui_MainWindow(object):
         self.menu.setObjectName("menu")
         self.menu_2 = QtWidgets.QMenu(self.menu)
         self.menu_2.setObjectName("menu_2")
+        self.menu_COM = QtWidgets.QMenu(self.menu)
+        self.menu_COM.setObjectName("menu_COM")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -787,6 +1306,7 @@ class Ui_MainWindow(object):
         self.menu_2.addAction(self.powered_model)
         self.menu_2.addAction(self.production_model)
         self.menu.addAction(self.menu_2.menuAction())
+        self.menu.addAction(self.menu_COM.menuAction())
         self.menu.addAction(self.toggleAIM)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menu.menuAction())
@@ -801,12 +1321,30 @@ class Ui_MainWindow(object):
         
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Лабораторная печь v0.2.21"))
+        
+        self.power_label.setText(_translate("MainWindow", "Источник тока:"))
+        self.temperature1_label.setText(_translate("MainWindow", "Термопара 1:"))
+        self.motor2_status.setText(_translate("MainWindow", "Норма"))
+        self.temperature1_status.setText(_translate("MainWindow", "Норма"))
+        self.power_status.setText(_translate("MainWindow", "Норма"))
+        self.com_label.setText(_translate("MainWindow", "COM:"))
+        self.temperature2_label.setText(_translate("MainWindow", "Термопара 2:"))
+        self.current_com.setText(_translate("MainWindow", "Полключение к COM3"))
+        self.heat_status.setText(_translate("MainWindow", "Норма"))
+        self.motor1_status.setText(_translate("MainWindow", "Норма"))
+        self.motor2_label.setText(_translate("MainWindow", "Двигатель 2:"))
+        self.heat_label.setText(_translate("MainWindow", "Нагрев:"))
+        self.temperature2_status.setText(_translate("MainWindow", "Норма"))
+        self.motor1_label.setText(_translate("MainWindow", "Двигатель 1:"))
+        
+        
+        
         self.label_8.setText(_translate("MainWindow", "Название"))
         self.label_9.setText(_translate("MainWindow", "Код"))
         self.label_10.setText(_translate("MainWindow", "XXXXX"))
-        self.label_11.setText(_translate("MainWindow", "Комментарий"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_6), _translate("MainWindow", "Настройка"))
+        self.label_11.setText(_translate("MainWindow", "План эксперимента"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_6), _translate("MainWindow", "Параметры эксперимента"))
         self.label_7.setText(_translate("MainWindow", "Протокол"))
         item = self.tableWidget.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "1"))
@@ -872,6 +1410,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Время"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Температура"))
+        self.timeKoefLabel.setText('K_TIME')
         self.label.setText(_translate("MainWindow", "K_1"))
         self.label_2.setText(_translate("MainWindow", "K_2"))
         self.label_3.setText(_translate("MainWindow", "K_3"))
@@ -880,9 +1419,13 @@ class Ui_MainWindow(object):
         
         self.label_1_ind.setText(_translate("MainWindow", "K_1"))
         self.label_2_ind.setText(_translate("MainWindow", "K_2"))
+        self.label_3_ind.setText(_translate("MainWindow", "K_3"))
+        self.label_temp_ind.setText(_translate("MainWindow", "K_TEMP"))
         
-        self.label_space.setText(_translate("MainWindow", "Допустимость"))
-        self.space_input.setValue(10.)
+        
+        self.space_temperature_input.setValue(10.)
+        self.space_amperage_input.setValue(10.)
+        
         
         
         self.k1_input.setMaximum(10000)
@@ -895,82 +1438,171 @@ class Ui_MainWindow(object):
         self.doubleSpinBox.setValue(self.state.experiment.ssTarget)
         self.doubleSpinBox.valueChanged.connect(lambda: self.state.experiment.setSSTarget(self.doubleSpinBox.value(), True))
         
-        
+        self.timeKoefSpinBox.valueChanged.connect(lambda: self.setK_TIME(self.timeKoefSpinBox.value()))
         self.k1_input.setValue(self.state.pidModule.k1)
         self.k2_input.setValue(self.state.pidModule.k2)
         self.k3_input.setValue(self.state.pidModule.k3)
         self.k4_input.setValue(self.state.pidModule.k4)
         self.k5_input.setValue(self.state.pidModule.k5)
+        self.timeKoefSpinBox.setValue(self.state.timeKoefValue)
         
         
         self.k1_ind_input.setMaximum(10000)
+        self.k1_ind_input.setDecimals(5)
         self.k2_ind_input.setMaximum(10000)
+        self.k2_ind_input.setDecimals(5)
+        self.k2_ind_input.setMaximum(10000)
+        self.k3_ind_input.setDecimals(5)
+        
+        self.temp_ind_input.setMaximum(10000)
+        self.temp_ind_input.setDecimals(3)
+        
+        
         self.k1_ind_input.setValue(self.state.pidModuleIndustrial.k1)
         self.k2_ind_input.setValue(self.state.pidModuleIndustrial.k2)
+        self.k3_ind_input.setValue(self.state.pidModuleIndustrial.k3)
         
         self.k1_ind_input.hide()
         self.k2_ind_input.hide()
+        self.k3_ind_input.hide()
+        self.temp_ind_input.hide()
         
         self.label_1_ind.hide()
         self.label_2_ind.hide()
+        self.label_3_ind.hide()
+        self.label_temp_ind.hide()
         
         
         self.saveExpButton.setText('Сохранить')
+        self.copyExpButton.setText('Копировать')
         self.dropExpButton.setText('Новый')
+        
         # self.dropExpButton.setEnabled(False)
         self.deleteExpButton.setText('Удалить')
+        self.loadExpButton.setText(_translate("MainWindow", "Загрузить"))
+        
+        self.excelExportButton.setText('Экспорт в Excel')
         
         
         # self.pushButton.setText(_translate("MainWindow", "Применить"))
         self.addTableRowButton.setText(_translate("MainWindow", "Добавить"))
         self.cur_model_layout.setText(_translate("MainWindow", "Степенная"))
         self.label_6.setText(_translate("MainWindow", "Текущая модель:"))
-        self.start_btn.setText(_translate("MainWindow", "Продолжить"))
-        self.stop_btn.setText(_translate("MainWindow", "Остановить"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Подготовка"))
+        
+        self.actionLabel_1.setText(_translate("MainWindow", "Управление данными"))
+        self.actionLabel_2.setText(_translate("MainWindow", "Управление этапом"))
+        self.free_real_track_btn.setText(_translate("MainWindow", "Сбросить данные этапа"))
+        self.start_btn.setText(_translate("MainWindow", "Старт"))
+        self.stop_btn.setText(_translate("MainWindow", "Стоп"))
+        
+        
+        self.label_010.setText(_translate("MainWindow", "Текущая температура, °C"))
+        self.realTemperature_1.setText(_translate("MainWindow", "?"))
+        
+        self.label_101.setText(_translate("MainWindow", "Текущая мощность, %"))
+        self.label_102.setText(_translate("MainWindow", "Текущая мощность, %"))
+        self.realPower_1.setText('0')
+        self.realPower_2.setText('0')
+        
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Выход на режим"))
         self.label_12.setText(_translate("MainWindow", "Управление"))
-        self.label_15.setText(_translate("MainWindow", "Целевая температура"))
-        self.startTest.setText(_translate("MainWindow", "Начать"))
-        self.stopTest.setText(_translate("MainWindow", "Остановить"))
+        self.label_15.setText(_translate("MainWindow", "Целевая температура, °C"))
+        self.label_006.setText('Текущая температура, °C')
+        self.label_007.setText('Температура электролита, °C')
+        
+        self.realTemperature_2.setText('?')
+        self.realThermocouple.setText('?')
+        self.saveThermocoupleBtn.setText('Записать')
+        
+        self.backfillsLabel.setText('Подсыпка (название, граммы)')
+        self.backfillRecordButton.setText('Записать')
+        
+        
+        
+        self.startTest.setText(_translate("MainWindow", "Старт"))
+        self.stopTest.setText(_translate("MainWindow", "Стоп"))
         self.label_16.setText(_translate("MainWindow", "Двигатели"))
         
-        self.label_003.setText(_translate("MainWindow", "Найти базу"))
+        self.allertLabel_1.setText(_translate("MainWindow", "Сигнализация"))
+        self.allertLabel_2.setText(_translate("MainWindow", "Статус"))
+        self.allertLabel_3.setText(_translate("MainWindow", "Настройка звука"))
+        self.muteButton.setText(_translate("MainWindow", "Выключить"))
+        
+        
+        self.spaceTemperatureLabel.setText(_translate("MainWindow", "Допуск t, °C"))
+        self.spaceAmperageLabel.setText(_translate("MainWindow", "Допуск I, А"))
+        
+        self.label_003.setText(_translate("MainWindow", "Поиск базы"))
         self.baseSearch.setText(_translate("MainWindow", "Поиск"))
         
-        self.label_17.setText(_translate("MainWindow", "Найти 0"))
+        self.label_0031.setText(_translate("MainWindow", "Аварийная остановка"))
+        self.stopMotorBtn.setText(_translate("MainWindow", "СТОП"))
+        
+        self.label_17.setText(_translate("MainWindow", "Поиск электролита"))
         self.zeroSearch.setText(_translate("MainWindow", "Поиск"))
-        self.label_18.setText(_translate("MainWindow", "Перемешивать"))
+        self.label_18.setText(_translate("MainWindow", "Вращение, об/мин"))
         self.smashSwitch.setText(_translate("MainWindow", "Начать"))
         
         
         self.label_001.setText(_translate("MainWindow", "Текущая глубина"))
         self.realDeepLabel.setText(_translate("MainWindow", "?"))
         
+        self.label_001_1.setText(_translate("MainWindow", "Текущая глубина\nпогружения в\nэлектролит"))
+        self.realDeepLabelOfZero.setText(_translate("MainWindow", "?"))
+        
         self.label_002.setText(_translate("MainWindow", "Целевая глубина"))
         self.targetDeepSpinBox.setMinimum(0)
-        self.targetDeepSpinBox.setMaximum(400)
+        self.targetDeepSpinBox.setMaximum(525)
         self.setTargetDeep.setText(_translate("MainWindow", "Прменить"))
+        
+        
+        
+        self.label_004.setText(_translate("MainWindow", "Электролиз"))
+        self.label_005.setText(_translate("MainWindow", "Целевой ток, А"))
+        self.setPowerButton.setText(_translate("MainWindow", "Включить"))
+        
+        self.label_008.setText(_translate("MainWindow", "Текущий измеренный\nток, А"))
+        self.realAmperage.setText(_translate("MainWindow", "?"))
+        self.label_009.setText(_translate("MainWindow", "Текущее измеренное\nнапряжение, В"))
+        self.realVoltage.setText(_translate("MainWindow", "?"))
+        
+        self.indipendentTitleLabel.setText('Независимое измерение')
+        self.label_321.setText(_translate("MainWindow", "Температура, °C         "))
+        self.label_3210.setText(_translate("MainWindow", "Время активного \nграфика, мин"))
+        self.statusTemperature.setText(_translate("MainWindow", "?"))
+        self.statusTime.setText(_translate("MainWindow", "?"))
+        
         
         self.label_19.setText(_translate("MainWindow", "Добавить комментарий"))
         self.submitComment.setText(_translate("MainWindow", "Записать"))
         self.pushButton_4.setText(_translate("MainWindow", "Отмена"))
-        self.label_13.setText(_translate("MainWindow", "Ход испытания"))
+        
+        
+        
         self.label_14.setText(_translate("MainWindow", "Логи испытания"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "Испытание"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "Эксперимент"))
         self.menuFile.setTitle(_translate("MainWindow", "Файл"))
         self.menu.setTitle(_translate("MainWindow", "Настройки"))
         self.toggleAIM.setText(_translate("MainWindow", "ВКЛ/ВЫКЛ слежение"))
         self.toggleAIM.triggered.connect(lambda: self.state.togleAIM())
         self.menu_2.setTitle(_translate("MainWindow", "Выбрать модель ПИД"))
+        # self.menu_2.setDisabled(True)
+        self.menu_COM.setTitle(_translate("MainWindow", "Сменить COM"))
         self.free_track.setText(_translate("MainWindow", "Отчистить"))
+        self.free_track.setDisabled(True)
         self.free_real_track.setText(_translate("MainWindow", "Отчистить данные"))
         self.base_model.setText(_translate("MainWindow", "Базовая"))
         self.powered_model.setText(_translate("MainWindow", "Степенная"))
         self.powered_model.triggered.connect(lambda : self.setCurrentModel(self.powered_model.text()))
+        self.powered_model.setDisabled(True)
+        self.setCurrentModel("Промышленная")
         self.production_model.setText(_translate("MainWindow", "Промышленная"))
         self.production_model.triggered.connect(lambda : self.setCurrentModel(self.production_model.text()))
-        self.load_file.setText(_translate("MainWindow", "Загрузить трек"))
+        self.load_file.setText(_translate("MainWindow", "Загрузить эксперимент"))
         self.save_as_file.setText('Сохранить')
+        
+        
+        
     
     
     
@@ -999,35 +1631,59 @@ class Ui_MainWindow(object):
             self.state.experiment.delete()
         self.dropInfo()
         #TODO: add allert
-           
+    
+    def __savePIDParams(self):
+        with open('pidParams.conf', 'w') as file:
+            str = f'{self.state.K_1} {self.state.K_2} {self.state.K_3} {self.state.K_4} {self.state.K_5} {self.state.timeKoefValue} {self.state.K_1_industrial} {self.state.K_2_industrial} {self.state.K_3_industrial}'
+            data = file.write(str)
+    
     def setK_1(self, value):
         self.state.K_1 = value
-        print('K_1', self.state.K_1)
+        self.__savePIDParams()
+        
         
     def setK_2(self, value):
         self.state.K_2 = value
-        print('K_2', self.state.K_2)
+        self.__savePIDParams()
         
     def setK_3(self, value):
         self.state.K_3 = value
-        print('K_3', self.state.K_3)
+        self.__savePIDParams()
         
     def setK_4(self, value):
         self.state.K_4 = value
-        print('K_4', self.state.K_4)
+        self.__savePIDParams()
         
     def setK_5(self, value):
         self.state.K_5 = value
-        print('K_5', self.state.K_5)
+        self.__savePIDParams()
+        
+    def setK_TIME(self, value):
+        self.state.timeKoefValue = value
+        self.__savePIDParams()
         
     def setK_1_industrial(self, value):
         self.state.K_1_industrial = value
-        print('K_1_industrial', self.state.K_5)
+        print('K_1_industrial', self.state.K_1_industrial)
+        self.__savePIDParams()
         
     def setK_2_industrial(self, value):
         self.state.K_2_industrial = value
-        print('K_2_industrial', self.state.K_5)
+        print('K_2_industrial', self.state.K_2_industrial)
+        self.__savePIDParams()
         
-    def setSpaceValue(self, value):
+    def setK_3_industrial(self, value):
+        self.state.K_3_industrial = value
+        print('K_3_industrial', self.state.K_3_industrial)
+        self.__savePIDParams()
+        
+    def setK_temp_industrial(self, value):
+        self.state.tempDelta = value
+        
+    def setTemperatureSpaceValue(self, value):
         self.state.spaceValue = value
-        print('K_2_industrial', self.state.spaceValue)
+        print('temperature space', self.state.spaceValue)
+        
+    def setAmperageSpaceValue(self, value):
+        self.state.amperageSpace = value
+        print('temperature space', self.state.amperageSpace)

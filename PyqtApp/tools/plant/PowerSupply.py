@@ -9,13 +9,14 @@ class PowerSupply:
     
     def getStatus(self, ser):
         # 03 00 01 00 01
-        msg = self.address + b'\x03\x00\x01\x00\x01'
+        msg = self.address + b'\x03\x00\x03\x00\x01'
         # convert status
         size, answer = sendMessage(ser, msg)
         print('status answer', answer)
         res, code, info = checkAnswer(size, answer)
         if res:
             self.status = int(binascii.b2a_hex(answer[3:5]), 16)
+            print('status code', self.status)
             return True
         return False
     
@@ -33,7 +34,7 @@ class PowerSupply:
         #msg
         msg = self.address + b'\x10\x00\x06\x00\x01\x02\x00\x00'
         size, answer = sendMessage(ser, msg)
-        print('switch off answer', answer)
+        print('switch off power supply answer', answer)
         res, code, info = checkAnswer(size, answer)
         if res:
             return True
@@ -84,5 +85,28 @@ class PowerSupply:
         res, code, info = checkAnswer(size, answer)
         if res:
             return int(binascii.b2a_hex(answer[3:5]), 16) / 10
+        return -1
+    
+    
+    def getVoltage(self, ser):
+        ''' 
+        Get current voltage value
+        
+        params:
+         - ser[serial.Serial] - Serial port connection
+         
+        returns:
+         - value[float|int] - Float value of the amperage or -1 in case of error
+        
+        '''
+        # 03 00 01 00 01 amperage
+        # 03 00 00 00 01 voltage
+        msg = self.address + b'\x03\x00\x00\x00\x01'
+        
+        size, answer = sendMessage(ser, msg)
+        print('amperage answer', answer)
+        res, code, info = checkAnswer(size, answer)
+        if res:
+            return int(binascii.b2a_hex(answer[3:5]), 16) / 100
         return -1
         

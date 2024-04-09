@@ -18,9 +18,10 @@ class TemperatureDataBase(BaseData):
         self.time = time
     
     @classmethod
-    def selectByExperimentId(cls, experimentId):
+    def selectByExperimentId(cls, experimentId, last=False):
         with DBSessionMaker.getSession() as ses:
-            return ses.query(cls).filter_by(experimentId=experimentId).order_by(cls.time).all()
-    
+            if not last:
+                return ses.query(cls).filter_by(experimentId=experimentId).order_by(cls.time).all()
+            return ses.query(cls).filter_by(experimentId=experimentId).order_by(cls.time.desc()).first()
     
     

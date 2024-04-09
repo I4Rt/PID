@@ -111,7 +111,10 @@ class Motor:
         speed = "{0:x}".format(int(speed*1000))
         if len(speed)%2:
             speed = '0' + speed
+        
         speed = bytes.fromhex(speed)
+        if len(speed) < 2:
+            speed = b'\x00'+speed
         # print('speed hex value', speed)
         
         #            device    command   register      value

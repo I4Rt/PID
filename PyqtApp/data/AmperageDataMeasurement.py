@@ -3,19 +3,23 @@ from data.BaseData import *
 class AmperageDataMeasurement(BaseData):
     __tablename__ = 'AmperageDataMeasurement'
     
-    time = Column(Integer, unique=False)
+    time = Column(Double, unique=False)
     value = Column(Double, unique=False)
+    targetValue = Column(Double, unique=False)
     
     experimentId = Column(Integer, ForeignKey('Experiment.id', ondelete="CASCADE"), nullable=False)
     
     
-    def __init__(self, value:float, time:int, expId:int = None):
+    def __init__(self, value:float, targetValue:float, time:float, expId:int = None):
         self.value = value
+        self.targetValue = targetValue
         self.time = time
-        self.expId = expId
+        self.experimentId = expId
         
     
     @classmethod
-    def selectByExperimentId(cls, experimentId):
+    def selectByExperimentId(cls, experimentId, last=False):
         with DBSessionMaker.getSession() as ses:
-            return ses.query(cls).filter_by(experimentId=experimentId).order_by(cls.time).all()
+            if not last:
+                return ses.query(cls).filter_by(experimentId=experimentId).order_by(cls.time).all()
+            return ses.query(cls).filter_by(experimentId=experimentId).order_by(cls.time.desc()).first()

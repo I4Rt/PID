@@ -1,4 +1,4 @@
-from time import time
+from time import time, sleep
 
 
 
@@ -22,31 +22,31 @@ class PID:
         self.prev_temperatures = self.prev_temperatures[-50:]
         
     def getPower(self, T_cur, T_ref):
+        now=time() * 100
+        if self.prev_time != None:
+            if now - self.prev_time < 500: # 5 sec
+                return self.prev_power
         if T_cur == None:
             return self.prev_power
         
-        now=time() * 100
+        
         
         self.T_prev, dt2 = self.prev_temperatures[-2] if len(self.prev_temperatures) > 2 else (T_cur, now - 1)
         # self.T_prev = min(T_cur - 1, self.T_prev)
         self.T_ref_prev = 20
-        
+        dt2 = now - dt2
         print(self.T_prev, dt2)
         dt1 = now - self.prev_time if self.prev_time else now - 1
         
-        k1 = 550
-        k2 = 2
-        k3 = 1.6
-        k4 = 0.5
-        k5 = 0.4
+        
         
         
         print('temperatures', T_cur, T_ref, self.T_ref_prev)
         print('dt1, dt2', dt1, dt2)
-        
+        #TODO:wrong formula? why dt2 is just time
         
         try:
-            POWER = k1 * T_cur * (k4 ** (k2 + (T_cur - self.T_prev)/dt2 ) - k5 ** (k3 + (T_ref - T_cur) / (T_cur - self.T_ref_prev) )) / dt1
+            POWER = self.k1 * T_cur * (self.k4 ** (self.k2 + (T_cur - self.T_prev)/dt2 ) - self.k5 ** (self.k3 + (T_ref - T_cur) / (T_cur - self.T_ref_prev) )) / dt1
             self.T_cur = T_cur
         except ZeroDivisionError:
             POWER = self.prev_power
@@ -62,33 +62,109 @@ class PID:
         
 class IndustrialPID:
 
-    def __init__(self, k1 = 120, k2 = 350):
+    def __init__(self, k1 = 120, k2 = 350, k3 = 1):
     
         self.k1 = k1 #Kp
         self.k2 = k2 #Ki
+        self.k3 = k3 #Ki
         
         self.d_T_prev = None
         self.prev_time = None
         
-        self.prev_power = None
+        self.prev_power = 0
+        self.prev_temperature = None
+        
+        self._pass_counter = 0
         
     
     def getPower(self, T_cur, T_ref):
         if T_cur == None:
             return self.prev_power
         
-        now=time()                      # in seconds
+        now=round(time(),2)                      # in seconds
+        if self.prev_time != None:
+            if now - self.prev_time < 4:
+                sleep(2 - (now - self.prev_time))
+                now=round(time(),2)
+                
+        # if self.prev_temperature != None: # проверка погрешностей
+            
+        #     if abs(self.prev_temperature - T_cur) < 0.2:
+        #         self._pass_counter += 1
+        #         if self._pass_counter < 6:
+        #             self.prev_time = now
+        #             # self.d_T_prev = T_ref - T_cur # ??
+        #             return self.prev_power
+        #         else:
+        #             self._pass_counter = 0
+            
         if not self.prev_time:
             self.prev_time = now
             
         
         d_time = now - self.prev_time
         d_T = T_ref - T_cur
-        if not self.d_T_prev:
+        if self.d_T_prev == None:
             self.d_T_prev = d_T
+        #                                                   -?               /?
+        POWER = self.k1*(d_T*self.k3 + min(max(-10**4, (d_T + self.d_T_prev) * d_time * self.k2), 10**4) )
         
-        POWER = 100*(d_T + min(max(-10**4, (d_T + self.d_T_prev) * d_time / self.k2), 10**4) )/self.k1
-        
-        self.prev_power = min(max(POWER, 0), 80)
+        self.prev_power = POWER
         self.prev_time = now
+        self.d_T_prev = d_T
+        self.prev_temperature = T_cur
+        
+        print(f'\n\n\nPIDKOEFS\n{self.k1}, {self.k2}, {self.k3}\n\n\n')
+        return POWER
+    
+    
+    
+    
+    
+class IndustrialPIDV2:
+
+    def __init__(self, k1 = 120, k2 = 350, k3 = 1):
+    
+        self.k1 = k1 #Kp
+        self.k2 = k2 #Ki
+        self.k3 = k3 #Kd
+        
+        
+        self.prev_time = None
+        
+        self.prev_power = 0
+        self.prev_temperature = None
+        
+        self.__last_differences = []
+        
+    
+    def getPower(self, T_cur, T_ref):
+        if T_cur == None:
+            return self.prev_power
+        
+        now=round(time(),2)                      # in seconds
+        if self.prev_time != None:
+            if now - self.prev_time < 4.5:       # not ealier than 5 secs
+                return self.prev_power
+            elif now - self.prev_time < 5:
+                sleep(5 - (now - self.prev_time))
+                now=round(time(),2)
+        
+        time_delta = now - self.prev_time if self.prev_time != None else 5 # seconds
+        E_cur = T_ref - T_cur
+        E_prev = self.__last_differences[-1][0] if len(self.__last_differences) > 0 else E_cur
+        
+        
+        
+        I = min( 10000, max(-10000, sum(pair[0]*pair[1] for pair in self.__last_differences) + E_cur*time_delta)) # in -10^4 ... 10^4
+        D = (E_cur - E_prev) / time_delta
+        
+        POWER = self.k1*(E_cur + I/self.k2 + self.k3*D)
+        
+        self.__last_differences.append([E_cur, time_delta])
+        self.__last_differences = self.__last_differences[-120]
+        
+        self.prev_time = now
+        self.prev_power = POWER
+        
         return POWER
