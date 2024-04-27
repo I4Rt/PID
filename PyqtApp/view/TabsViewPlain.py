@@ -1157,6 +1157,7 @@ class Ui_MainWindow(object):
         self.backfillsGridLayout.addWidget(self.inputBackfills_elem_1, 0, 0, 1, 1)
         self.inputBackfills_elem_value_1 = QtWidgets.QDoubleSpinBox(self.tab_7)
         self.inputBackfills_elem_value_1.setObjectName("inputBackfills_elem_value_1")
+        
         self.backfillsGridLayout.addWidget(self.inputBackfills_elem_value_1, 0, 1, 1, 1)
         self.inputBackfills_elem_2 = QtWidgets.QLineEdit(self.tab_7)
         self.inputBackfills_elem_2.setObjectName("inputBackfills_elem_2")
@@ -1186,6 +1187,13 @@ class Ui_MainWindow(object):
         self.backfillRecordButton = QtWidgets.QPushButton(self.tab_7)
         self.backfillRecordButton.setObjectName("backfillRecordButton")
         self.backfillsGridLayout.addWidget(self.backfillRecordButton, 5, 0, 1, 2)
+        
+        
+        self.inputBackfills_elem_value_1.setMaximum(1000)
+        self.inputBackfills_elem_value_2.setMaximum(1000)
+        self.inputBackfills_elem_value_3.setMaximum(1000)
+        self.inputBackfills_elem_value_4.setMaximum(1000)
+        self.inputBackfills_elem_value_5.setMaximum(1000)
         
         self.inputBackfills_elem_1.setMaximumWidth(100)
         self.inputBackfills_elem_value_1.setMaximumWidth(100)
@@ -1321,7 +1329,7 @@ class Ui_MainWindow(object):
         
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Лабораторная печь v0.2.21"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Лабораторная печь v1.0.7"))
         
         self.power_label.setText(_translate("MainWindow", "Источник тока:"))
         self.temperature1_label.setText(_translate("MainWindow", "Термопара 1:"))
@@ -1452,6 +1460,7 @@ class Ui_MainWindow(object):
         self.k2_ind_input.setMaximum(10000)
         self.k2_ind_input.setDecimals(5)
         self.k2_ind_input.setMaximum(10000)
+        self.k3_ind_input.setMaximum(10000)
         self.k3_ind_input.setDecimals(5)
         
         self.temp_ind_input.setMaximum(10000)

@@ -19,6 +19,7 @@ class ThermoGetter:
         if res:
             temp = int.from_bytes(answer[5:7], byteorder='big')
             order = int.from_bytes(answer[3:5], byteorder='big')
+            print('\n\n\n\n\n\n\n\n\n\n\n\n\ngot temperature', temp)
             return temp / 10 **order
         return None
         

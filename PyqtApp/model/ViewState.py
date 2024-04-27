@@ -128,6 +128,7 @@ class ViewState:
         
         #thermocouple
         self.needSaveThermocouple=False
+        self.outerThermocoupleTemperature = None
         
         #errors
         self.heaterError        = True

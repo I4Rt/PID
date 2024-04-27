@@ -142,15 +142,16 @@ class IndustrialPIDV2:
         if T_cur == None:
             return self.prev_power
         
+        check_time = 10
         now=round(time(),2)                      # in seconds
         if self.prev_time != None:
-            if now - self.prev_time < 4.5:       # not ealier than 5 secs
+            if now - self.prev_time < check_time - 1.:       # not ealier than 10 secs
                 return self.prev_power
-            elif now - self.prev_time < 5:
-                sleep(5 - (now - self.prev_time))
-                now=round(time(),2)
+            elif now - self.prev_time < check_time:
+                sleep(check_time - (time() - self.prev_time))
+                now=round(time(), 2)
         
-        time_delta = now - self.prev_time if self.prev_time != None else 5 # seconds
+        time_delta = now - self.prev_time if self.prev_time != None else check_time # seconds
         E_cur = T_ref - T_cur
         E_prev = self.__last_differences[-1][0] if len(self.__last_differences) > 0 else E_cur
         
@@ -159,10 +160,19 @@ class IndustrialPIDV2:
         I = min( 10000, max(-10000, sum(pair[0]*pair[1] for pair in self.__last_differences) + E_cur*time_delta)) # in -10^4 ... 10^4
         D = (E_cur - E_prev) / time_delta
         
+        last_index = max(-6, -1*len(self.__last_differences)) # need index not greater than 4 rfom the end
+        E_dif = 0 if len(self.__last_differences) == 0 else E_cur - self.__last_differences[last_index][0]
+        time_sum = sum([self.__last_differences[i][1]  for i in range(-1, last_index, -1)]) + time_delta
+        
+        D_TEST = E_dif / time_sum
+        
         POWER = self.k1*(E_cur + I/self.k2 + self.k3*D)
         
+        print('\n\n\n\n\nDELTAS\n', 'time', time_delta, '\nt_real', T_cur, '\nt_target', T_ref )
+        print('prev_power', self.prev_power, 'power', POWER, '\nI', I/self.k2, '\nD', self.k3*D, 'D_TEST', self.k3 * D_TEST, '\nP', E_cur, '\n\n\n\n\n',)
+        
         self.__last_differences.append([E_cur, time_delta])
-        self.__last_differences = self.__last_differences[-120]
+        self.__last_differences = self.__last_differences[-10:]
         
         self.prev_time = now
         self.prev_power = POWER

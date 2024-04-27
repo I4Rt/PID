@@ -29,7 +29,7 @@ from model.ConnectionHolder import ConnectionHolder
 import random
 import serial
 import os
-
+from matplotlib import pyplot as plt
 
 
 os.environ["QT_DEBUG_PLUGINS"] = "1"
@@ -104,6 +104,11 @@ def finish():
         os.remove('run.tmp')
     except Exception as e:
         print(e)
+    try:
+        plt.close("all")
+    except Exception as e:
+        print(e)
+    
 
 
 if __name__ == "__main__":  

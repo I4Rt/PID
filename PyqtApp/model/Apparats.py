@@ -14,4 +14,4 @@ heater = Heater(b'\x01')
 voltageGetter = VoltageGetter(b'\x01')
 
 thermoCoupleMainGetter = ThermoGetter(b'\x02', b'\x00\x00')
-thermoCoupleOuterGetter = ThermoGetter(b'\x02', b'\x00\x06')
+thermoCoupleOuterGetter = ThermoGetter(b'\x02', b'\x00\x06') # updated

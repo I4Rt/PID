@@ -26,7 +26,7 @@ class ApparatController():
         try:
             state = ViewState.getState()
             self.updateStatuses()
-            sleep(0.5)
+            sleep(0.2)
             
             x1 = state.getPlot1NowTime()
             x2 = state.getPlot2NowTime()
@@ -84,8 +84,10 @@ class ApparatController():
                         state.experiment.addVoltageData(state.realVolrage, x2)
                         
                         if state.needSaveThermocouple:
-                            if state.realThermocouple:
+                            print('\n\n\nneed thermocoupe.save\n\n\n', not (state.realThermocouple is None))
+                            if not (state.realThermocouple is None):
                                 state.experiment.addThermocoupleData(state.realThermocouple, x2)
+                                print('\n\n\nthermocoupe.save\n\n\n')
                             state.needSaveThermocouple = False
             else:
                 
@@ -193,10 +195,10 @@ class ApparatController():
                   state.pidModule.k4,
                   state.pidModule.k5,
                   state.selectedPID, sep='\n')
-            # if curT > 25:
-            # temperatureDelta = pidTools.getTemperatureUpscale(refT)
-            # state.tempDelta = temperatureDelta
-            temperatureDelta = 0
+            
+            temperatureDelta = pidTools.getTemperatureUpscale(refT)
+            # temperatureDelta = 0.
+            state.tempDelta = temperatureDelta
             state.curPower = max(0, min(state.getPower(curT, refT + temperatureDelta), pidTools.maxPowerCorrector(curT)))
                 # state.curPower = max(0, min(state.getPower(curT, refT), 90))
             # else:
@@ -433,9 +435,8 @@ class ApparatController():
 
 
     def __thermocoupleControl(self, state:ViewState, x2:float):
-        # Считать данные термопары
-        #temperature = ...
-        # state.realThermocouple = temperature
+        temperature = thermoCoupleOuterGetter.getTemperature(ConnectionHolder.getConnection())
+        state.realThermocouple = None if temperature is None and state.realThermocouple is None else temperature
         pass
                     
     def __voltageControl(self, state:ViewState):

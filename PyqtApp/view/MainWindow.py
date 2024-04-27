@@ -19,6 +19,8 @@ import winsound
 
 import pandas as pd 
 
+from sqlalchemy.exc import IntegrityError
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def __init__(self,ser:serial.Serial, *args, **kwargs):
@@ -61,6 +63,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.loadExpButton.clicked.connect(self.loadExperiment)
         self.excelExportButton.clicked.connect(self.export)
         self.tableWidget.itemChanged.connect(self.updateDataFromTable)
+        
+        self.saveThermocoupleBtn.clicked.connect(self.askThermocoupleForSave)
         
         
         # control PID buttons
@@ -313,7 +317,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.muteButton.setText('Выключить')
             self.state.mute = False
             
-    
+    def askThermocoupleForSave(self):
+        self.state.needSaveThermocouple = True
+        print('self.state.needSaveThermocouple', self.state.needSaveThermocouple)
     
     def pauseFirstPID(self):
         if not self.state.plot1Stopped:
@@ -453,8 +459,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 self.__setExperimentDataToView()
                 raise Exception('Введите название эксперимента')
+        except IntegrityError as e:
+            self.showMessage('Ошибка', 'Название не является уникальным')
         except Exception as e:
-            self.showMessage('Ошибка', str(e))
+            self.showMessage('Ошибка', f'{e}')
             
     def dropExperiment(self):
         res = self.showPermit('Предупреждение','Вы действительно хотите \nудалить эксперимент?')
@@ -773,7 +781,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         nextItemId = model.index(rowId, colId+1)
                         nextData = model.data(nextItemId)
                         if nextData == '' or nextData == None:
-                            model.setData(nextItemId, self.state.indipendTemperature if self.state.indipendTemperature else 25)
+                            data_to_set = 25
+                            if self.state.indipendTemperature != None:
+                                if self.state.indipendTemperature > 25:
+                                    data_to_set = self.state.indipendTemperature
+                            model.setData(nextItemId, data_to_set)
                             
                 if not needSetNull:
                     data = model.data(itemId)
@@ -1010,10 +1022,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.model.ui_real_plot2_data.set_ydata(realDataArray[1])
             
             realData = self.model.state.experiment.getData(ThermocoupleData)
+        
             realThermocoupleDataArray = [[], []]
             for index in range(len(realData)):
                 realThermocoupleDataArray[0].append(realData[index].time/60)
                 realThermocoupleDataArray[1].append(realData[index].value)
+            print('\n\n\n\n\n\n\n\n\nThermocoupleData', len(realData), realThermocoupleDataArray, '\n\n\n\n\n\n\n\n\n\n\n')
                 
             self.model.ui_real_thermocouple_plot2_data.set_xdata(realThermocoupleDataArray[0])
             self.model.ui_real_thermocouple_plot2_data.set_ydata(realThermocoupleDataArray[1])
