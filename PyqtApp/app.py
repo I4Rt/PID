@@ -80,8 +80,6 @@ if not found:
 '''
 
 
-
-
 apparatController = ApparatController(ConnectionHolder.getConnection())
 apparatThread = StopableThread(True, target=apparatController.controllApparature, args=())
 apparatThread.start() 
@@ -91,25 +89,31 @@ window = MainWindow(ConnectionHolder.getConnection())
 def finish():
     app.exec_()
     apparatThread.stop()
+    errors = '\n'
     #принудительное выключение устройств
     try:
         powerSupply.switchOFF(ConnectionHolder.getConnection())
     except Exception as e:
+        errors += str(e)  + '\n'
         print('final power supply switch off error', e)
     try:
         heater.swithOFF(ConnectionHolder.getConnection())
     except Exception as e:
+        errors += str(e)  + '\n'
         print('final heater switch off error',e)
     try:
         os.remove('run.tmp')
     except Exception as e:
+        errors += str(e) + '\n'
         print(e)
     try:
         plt.close("all")
     except Exception as e:
         print(e)
     
-
+    if len(errors) > 1:
+        with open('errors.txt', 'a') as file:
+            file.write(f'{datetime.now()} {errors}')
 
 if __name__ == "__main__":  
     #run app

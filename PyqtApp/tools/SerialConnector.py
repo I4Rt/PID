@@ -8,7 +8,6 @@ def getExistPorts():
         info.append([portInfo[0], portInfo[1]])
         
     return info
-        
     
     
 if __name__ == '__main__':

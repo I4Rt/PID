@@ -26,7 +26,7 @@ from data.FSTargetDataMeasurement import *
 from data.FSRealDataMeasurement import *
 from data.SSRealDataMeasurement import *
 
-from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
+from matplotlib.ticker import (AutoMinorLocator, MultipleLocator, AutoLocator)
 
 class Ui_MainWindow(object):
     def __init__(self, *args, **kwargs):
@@ -1430,6 +1430,11 @@ class Ui_MainWindow(object):
         self.label_3_ind.setText(_translate("MainWindow", "K_3"))
         self.label_temp_ind.setText(_translate("MainWindow", "K_TEMP"))
         
+        self.k1_ind_input.setDisabled(True)
+        self.k2_ind_input.setDisabled(True)
+        self.k3_ind_input.setDisabled(True)
+        self.temp_ind_input.setDisabled(True)
+        
         
         self.space_temperature_input.setValue(10.)
         self.space_amperage_input.setValue(10.)
@@ -1561,7 +1566,7 @@ class Ui_MainWindow(object):
         
         self.label_002.setText(_translate("MainWindow", "Целевая глубина"))
         self.targetDeepSpinBox.setMinimum(0)
-        self.targetDeepSpinBox.setMaximum(525)
+        self.targetDeepSpinBox.setMaximum(530)
         self.setTargetDeep.setText(_translate("MainWindow", "Прменить"))
         
         

@@ -32,7 +32,7 @@ class ApparatController():
             x2 = state.getPlot2NowTime()
             
             pidWorks = self.__pidControlUpdated(state, x1, x2)
-            # print('pidWorks', pidWorks)
+            print('pidWorks', pidWorks)
             self.__motorsControl(state)
             # controll other booleans
             
@@ -55,6 +55,14 @@ class ApparatController():
             else:
                 state.needAlram=False
             
+            
+            with open(f'bug-catch{str(datetime.now())[:10]}.txt', 'a') as file:
+                
+                file.write(f'state.plot1Stopped {state.plot1Stopped}\n')
+                file.write(f'state.plot2Stopped {state.plot2Stopped}\n')
+                file.write(f'lastSaveTime {self.lastSaveTime}\n')
+                file.write(f'now {datetime.now()}\n')
+                file.write(f'pidWorks {pidWorks}\n\n\n')
     
             # add params
             if pidWorks: #TODO: add time intervales
@@ -64,46 +72,49 @@ class ApparatController():
                     
                     self.lastSaveTime = now
                     needSave = True
-                elif now - self.lastSaveTime >= 30:
+                elif now - self.lastSaveTime >= 30: #last save time bug
                     self.lastSaveTime = now
                     needSave = True
                 
                 
                 
                 
-                # print('state.plot1Stopped', state.plot1Stopped)
+                
+
                 if not state.plot1Stopped:
                     if needSave:
                         state.experiment.addFSRealData(state.realTemperature, x1)
-                else:
+                elif not state.plot2Stopped:
                     self.__thermocoupleControl(state, x2)
-                    if needSave:
+                    if needSave:                                   # need save bug
                         state.lastSSTime = x2
                         state.experiment.addSSRealData(state.realTemperature, x2)
                         state.experiment.addAmperageData(state.realAmperage, state.targetAmperage if state.powerIsOn else 0, x2)
                         state.experiment.addVoltageData(state.realVolrage, x2)
                         
                         if state.needSaveThermocouple:
-                            print('\n\n\nneed thermocoupe.save\n\n\n', not (state.realThermocouple is None))
+                            # print('\n\n\nneed thermocoupe.save\n\n\n', not (state.realThermocouple is None))
                             if not (state.realThermocouple is None):
                                 state.experiment.addThermocoupleData(state.realThermocouple, x2)
-                                print('\n\n\nthermocoupe.save\n\n\n')
+                                # print('\n\n\nthermocoupe.save\n\n\n')
                             state.needSaveThermocouple = False
             else:
                 
                 heater.swithOFF(ConnectionHolder.getConnection())
-                state.curPower = 0
+                state.curPower = 0.
                 state.needAlram = False
                 state.mute = False # нужно ли
                 
         except Exception as e:
+            with open(f'bug-catch{str(datetime.now())[:10]}.txt', 'a') as file:
+                file.write(f'{datetime.now()}\nexception {e}\n\n\n')
             # raise e
             print('apparature error', e)
             pass
          
     def updateStatuses(self,):
         state = ViewState.getState()
-        print('connection', ConnectionHolder.getConnection())
+        # print('connection', ConnectionHolder.getConnection())
         if ConnectionHolder.getConnection() != None:
             try:
                 t1 = thermoCoupleMainGetter.getTemperature(ConnectionHolder.getConnection())
@@ -115,7 +126,7 @@ class ApparatController():
                 h_status = voltageGetter.getVoltage(ConnectionHolder.getConnection())
                 ps_status = powerSupply.getStatus(ConnectionHolder.getConnection())
                 
-                print('statuses', t1,t2,m1_status,m2_status,h_status,ps_status)
+                # print('statuses', t1,t2,m1_status,m2_status,h_status,ps_status)
                 state.thermocouple1Error = True if t1 is None else False
                 state.thermocouple2Error = True if t2 is None else False
                 state.indipendTemperature = t1
@@ -152,7 +163,7 @@ class ApparatController():
             # print('refT', refT)
             state.realTemperature = curT = getTemperature(ConnectionHolder.getConnection(), b'\x02\x04\x00\x00\x00\x02')
             state.configPidParams()
-            state.curPower = max(0, min(state.getPower(curT, refT), pidTools.maxPowerCorrector(curT)))#pidTools.temperatureCorrector(refT)), pidTools.maxPowerCorrector(curT)))
+            state.curPower = max(0, min(state.getPower(curT, pidTools.temperatureCorrector(refT, 3.5))), pidTools.maxPowerCorrector(curT))   #update of 03.05.24     #pidTools.temperatureCorrector(refT)), pidTools.maxPowerCorrector(curT)))
             powerLevel = int(10000 * state.curPower / 100)
             swith_on(ConnectionHolder.getConnection())
             set_power(ConnectionHolder.getConnection(), powerLevel)
@@ -164,16 +175,18 @@ class ApparatController():
         return needPID
     
     def __pidControlUpdated(self, state:ViewState, x1:float, x2:float):
+        
+        
         needPID = False
         x = None
         if not state.plot1Stopped:
             if not state.plot1Pause:
                 x = x1
-                print('time from the beginning:', x)
+                # print('time from the beginning:', x)
                 track = state.experiment.getData(FSTargetDataMeasurement)
                 state.targetTemperature = getYinX(x/60, track)
                 refT = getYinX((x+state.timeKoefValue)/60, track) # need always save experiment model
-                print('time koef collibration', x/60, state.timeKoefValue, (x+state.timeKoefValue)/60, refT)
+                # print('time koef collibration', x/60, state.timeKoefValue, (x+state.timeKoefValue)/60, refT)
                 needPID = True
         elif not state.plot2Stopped:
             if not state.plot2Pause:
@@ -182,19 +195,25 @@ class ApparatController():
                 state.targetTemperature = refT = state.experiment.ssTarget # need always save experiment model
                 needPID = True
                 
+        # print('inside pid state.plot1Stopped', state.plot1Stopped)
+        # print('inside pid state.plot1Pause', state.plot1Pause)
+        # print('inside pid state.plot1Stopped', state.plot1Stopped)
+        # print('inside pid state.plot1Pause', state.plot1Pause)
+        # print('inside pid needPID', needPID, '\n\n\n')
+        
         state.currentTime = x
         if needPID:
             # print('refT', refT)
             state.realTemperature = curT = thermoCoupleMainGetter.getTemperature(ConnectionHolder.getConnection())
-            print('realTemperature', state.realTemperature)
+            # print('realTemperature', state.realTemperature)
             state.configPidParams()
-            print('PID',
-                  state.pidModule.k1,
-                  state.pidModule.k2,
-                  state.pidModule.k3,
-                  state.pidModule.k4,
-                  state.pidModule.k5,
-                  state.selectedPID, sep='\n')
+            # print('PID',
+            #       state.pidModule.k1,
+            #       state.pidModule.k2,
+            #       state.pidModule.k3,
+            #       state.pidModule.k4,
+            #       state.pidModule.k5,
+            #       state.selectedPID, sep='\n')
             
             temperatureDelta = pidTools.getTemperatureUpscale(refT)
             # temperatureDelta = 0.
@@ -205,7 +224,7 @@ class ApparatController():
             #     state.curPower = 25.0
             powerLevel = round(state.curPower/10, 2)
     
-            print('power (voltage)', powerLevel)
+            # print('power (voltage)', powerLevel)
             heater.swithON(ConnectionHolder.getConnection())
             heater.setVoltage(ConnectionHolder.getConnection(), powerLevel)
             
@@ -221,13 +240,13 @@ class ApparatController():
         
         #vartical
         if state.needSearchZero:
-            print('needSearchZero')
+            # print('needSearchZero')
             res, exc, msg = motorVertical.updateStatus(ConnectionHolder.getConnection())
             if not res:
                 print('vertical motor exception(status):', msg, (exc))
                 return
             else:
-                print('bools', motorVertical.movingCompleted, '\n')
+                # print('bools', motorVertical.movingCompleted, '\n')
                 if motorVertical.movingCompleted:
                     found = False
                     if state.realAmperage:

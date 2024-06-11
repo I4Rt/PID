@@ -191,6 +191,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.current_com.setText("Не выбран")
         
     def updateRealPowerUI(self):
+        print('\nout power', self.state.curPower)
         self.realPower_1.setText(str(round(self.state.curPower,1)))
         self.realPower_2.setText(str(round(self.state.curPower,1)))
             
@@ -286,7 +287,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 check1Passed = self.showPermit('Предупреждение', 'В подготовительном этапе эксперимента присутствуют данные, вы хотите продолжить его? (данные основного этапа будут удалены)')
                 if check1Passed:
                     self.state.experiment.dropSSRealData()
+                    self.state.experiment.dropAmperageData()
+                    self.state.experiment.dropThermocoupleData()
+                    self.state.experiment.dropVoltageData()
                     self.state.experiment.dropComments()
+                    self.state.experiment.dropFillings()
                     self.state.experiment.save()
                     
                     self.state.plot1Stopped = False
@@ -872,7 +877,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.model.ui_real_plot2_data, = self.model.subplot2.plot([], [], color="orange", linewidth=2) 
                 self.model.ui_real_thermocouple_plot2_data, = self.model.subplot2.plot([], [], color="yellow") 
         
-                self.model.ui_target_amperage_plot_data, = self.model.amperateSubplot.plot([], [], color="teal")
+                self.model.ui_target_amperage_plot_data, = self.model.amperateSubplot.plot([], [], color="indigo", linestyle='dashed')
                 self.model.ui_real_amperage_plot_data, = self.model.amperateSubplot.plot([], [], color="forestgreen")
                 
                 self.model.ui_real_voltage_plot_data, = self.model.voltageSubplot.plot([], [], color="red") 
@@ -976,6 +981,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for index in range(len(realData)):
                 realDataArray[0].append(realData[index].time/60)
                 realDataArray[1].append(realData[index].value)
+
+            
+            if len(targetData) > 0:
+                if targetData[-1].time//20 < 1:
+                    self.model.subplot.xaxis.set_major_locator(AutoLocator())
+                elif targetData[-1].time//20 < 9:
+                    self.model.subplot.xaxis.set_major_locator(MultipleLocator(20))
+                elif targetData[-1].time//60 < 9:
+                    self.model.subplot.xaxis.set_major_locator(MultipleLocator(60))
+                else:
+                    self.model.subplot.xaxis.set_major_locator(MultipleLocator(240))
                 
             # self.approx_figure = self.model.subplot.fill_between(np.array(targetDataArray[0]), np.array(targetDataArray[1]) + self.model.state.spaceValue, np.array(targetDataArray[1]) - self.model.state.spaceValue, color='blue', alpha=0.3)
             try:
@@ -1018,6 +1034,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 realDataArray[0].append(realData[index].time/60)
                 realDataArray[1].append(realData[index].value)
                 
+            if len(realData) > 0:
+                if realData[-1].time//20 < 1:
+                    self.model.subplot2.xaxis.set_major_locator(AutoLocator())
+                elif realData[-1].time//20 < 9:
+                    self.model.subplot2.xaxis.set_major_locator(MultipleLocator(20))
+                elif realData[-1].time//60 < 9:
+                    self.model.subplot2.xaxis.set_major_locator(MultipleLocator(60))
+                else:
+                    self.model.subplot2.xaxis.set_major_locator(MultipleLocator(240))
+                    
+                
             self.model.ui_real_plot2_data.set_xdata(realDataArray[0])
             self.model.ui_real_plot2_data.set_ydata(realDataArray[1])
             
@@ -1027,7 +1054,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for index in range(len(realData)):
                 realThermocoupleDataArray[0].append(realData[index].time/60)
                 realThermocoupleDataArray[1].append(realData[index].value)
-            print('\n\n\n\n\n\n\n\n\nThermocoupleData', len(realData), realThermocoupleDataArray, '\n\n\n\n\n\n\n\n\n\n\n')
+            # print('\n\n\n\n\n\n\n\n\nThermocoupleData', len(realData), realThermocoupleDataArray, '\n\n\n\n\n\n\n\n\n\n\n')
                 
             self.model.ui_real_thermocouple_plot2_data.set_xdata(realThermocoupleDataArray[0])
             self.model.ui_real_thermocouple_plot2_data.set_ydata(realThermocoupleDataArray[1])

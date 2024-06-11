@@ -123,7 +123,7 @@ class IndustrialPID:
     
 class IndustrialPIDV2:
 
-    def __init__(self, k1 = 120, k2 = 350, k3 = 1):
+    def __init__(self, k1 = 1.15, k2 = 12.9, k3 = 980):
     
         self.k1 = k1 #Kp
         self.k2 = k2 #Ki

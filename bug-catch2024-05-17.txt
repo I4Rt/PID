@@ -1,0 +1,496 @@
+2024-05-17 19:18:02.762622
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:02.965618
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:03.169282
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:03.372805
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:03.575393
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:03.778650
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:03.989903
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:04.197720
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:04.399723
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:04.602317
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:04.805045
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:05.007480
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:05.210861
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:05.413270
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:05.616532
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:05.818465
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:06.021409
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:06.224075
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:06.427574
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:06.630388
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:06.832395
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:07.035030
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:07.237864
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:07.441131
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:07.643908
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:07.846324
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:08.049295
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:08.252077
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:08.454166
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:08.656785
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:08.860552
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:09.066531
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:09.268481
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:09.471291
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:09.673148
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:09.879932
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:10.085052
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:10.288597
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:10.492078
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:10.695438
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:10.904150
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:11.108921
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:11.312650
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:11.515409
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:11.717643
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:11.930425
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:12.134110
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:12.336218
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:12.537954
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:12.740191
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:12.947273
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:13.151975
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:13.353754
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:13.556429
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:13.758292
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:13.965210
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:14.167742
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:14.369368
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:14.571865
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:14.774915
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:14.977459
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:15.179252
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:15.382486
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:15.585470
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:15.787671
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:15.990142
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:16.192681
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:16.394496
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:16.596901
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:16.800478
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:17.003293
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:17.206008
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:17.410496
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:17.613415
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:17.816129
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:18.019128
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:18.221957
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:18.425638
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:18.627725
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:18.831695
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:19.034731
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:19.237279
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:19.439454
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:19.642570
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:19.844464
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:20.048040
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:20.249684
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:20.452120
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:20.655019
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:20.857432
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:21.059659
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:21.262685
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:21.466080
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:21.667901
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:21.870802
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:22.073304
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:22.275670
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:22.477460
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:22.681330
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:22.884493
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:23.087084
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:23.289291
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:23.491749
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:23.695924
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:23.898847
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:24.100549
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:24.303586
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:24.505769
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:24.707691
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:24.917789
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:25.120594
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:25.323581
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:25.525345
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:25.728126
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:25.933387
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:26.136566
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:26.339291
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:26.541762
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:26.745411
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:26.961524
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:27.165903
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:27.368307
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:27.570703
+exception 'NoneType' object has no attribute 'write'
+
+
+2024-05-17 19:18:27.773085
+exception 'NoneType' object has no attribute 'write'
+
+

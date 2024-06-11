@@ -1,0 +1,12 @@
+2024-05-03 16:13:20.450775 
+'NoneType' object has no attribute 'write'
+'NoneType' object has no attribute 'write'
+2024-06-11 15:55:10.796925 
+'NoneType' object has no attribute 'write'
+'NoneType' object has no attribute 'write'
+2024-06-11 16:00:51.768210 
+'NoneType' object has no attribute 'write'
+'NoneType' object has no attribute 'write'
+2024-06-11 16:01:14.288021 
+'NoneType' object has no attribute 'write'
+'NoneType' object has no attribute 'write'

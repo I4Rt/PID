@@ -15,6 +15,7 @@ class ViewState:
         self.plot1Stopped = True
         self.plot2Stopped = True
         
+        # no idea what it is
         self.firstPID1Run = True
         self.firstPID2Run = True
         
@@ -61,9 +62,9 @@ class ViewState:
         self.K_4 = 0.
         self.K_5 = 0.
         
-        self.K_1_industrial = 120
-        self.K_2_industrial = 350
-        self.K_3_industrial = 350
+        self.K_1_industrial = 1.15
+        self.K_2_industrial = 12.9
+        self.K_3_industrial = 980
         
         self.timeKoefValue = 0
         self.tempDelta = 0
